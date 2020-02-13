@@ -1,0 +1,6 @@
+apply plugin: 'com.android.library'
+apply from: "$rootDir/presentation/base_presentation_module.gradle"
+
+dependencies {
+    implementation project (":presentation:core")
+}
