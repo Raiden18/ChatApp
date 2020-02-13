@@ -13,7 +13,10 @@
             <option value="$PROJECT_DIR$/presentation" />
             <option value="$PROJECT_DIR$/presentation/app" />
             <option value="$PROJECT_DIR$/presentation/core" />
-            <option value="$PROJECT_DIR$/presentation/log_in" />
+            <option value="$PROJECT_DIR$/presentation/screens" />
+            <option value="$PROJECT_DIR$/presentation/screens/log_in" />
+            <option value="$PROJECT_DIR$/presentation/widgets" />
+            <option value="$PROJECT_DIR$/presentation/widgets/three_states_text_input_layout" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

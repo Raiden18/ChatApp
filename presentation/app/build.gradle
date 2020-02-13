@@ -12,5 +12,5 @@ dependencies {
 
     //Presentation
     implementation project (":presentation:core")
-    implementation project (":presentation:log_in")
+    implementation project (":presentation:screens:log_in")
 }

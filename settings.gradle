@@ -3,6 +3,8 @@ include ':domain', ':data'
 //Presentation
 include ':presentation:app',
         ':presentation:core',
-        ':presentation:log_in'
+        //Screens
+        ':presentation:screens:log_in',
+        ':presentation:widgets:three_states_text_input_layout'
 
 rootProject.name = 'QuickvloxChat'
