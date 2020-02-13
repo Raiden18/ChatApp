@@ -1,0 +1,16 @@
+apply plugin: 'com.android.application'
+apply from: "$rootDir/presentation/base_presentation_module.gradle"
+android {
+    defaultConfig {
+        applicationId "com.raiden.quickvloxchat"
+    }
+}
+
+dependencies {
+    implementation project (":data")
+    implementation project (":domain")
+
+    //Presentation
+    implementation project (":presentation:core")
+    implementation project (":presentation:log_in")
+}

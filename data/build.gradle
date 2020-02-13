@@ -1,0 +1,11 @@
+apply plugin: 'com.android.library'
+apply from: "$rootDir/base_android_module.gradle"
+
+dependencies {
+    //Quickblox
+    implementation "com.quickblox:quickblox-android-sdk-chat:$versions.quickblox"
+    implementation "com.quickblox:quickblox-android-sdk-messages:$versions.quickblox"
+    implementation "com.quickblox:quickblox-android-sdk-content:$versions.quickblox"
+    implementation "com.quickblox:quickblox-android-sdk-extensions:$versions.quickblox"
+}
+

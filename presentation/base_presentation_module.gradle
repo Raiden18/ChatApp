@@ -1,0 +1,23 @@
+apply from: "$rootDir/base_android_module.gradle"
+
+dependencies {
+    //Ui
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.fragment:fragment:1.2.1'
+    implementation 'androidx.fragment:fragment-ktx:1.2.1'
+
+    //Koin
+    implementation "org.koin:koin-core:$versions.koin"
+    implementation "org.koin:koin-androidx-scope:$versions.koin"
+    implementation "org.koin:koin-androidx-viewmodel:$versions.koin"
+    implementation "org.koin:koin-androidx-ext:$versions.koin"
+
+    //Cicerone
+    implementation "ru.terrakok.cicerone:cicerone:$versions.cicerone"
+
+    //Test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+}
