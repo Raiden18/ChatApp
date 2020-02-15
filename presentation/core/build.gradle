@@ -1,2 +1,7 @@
 apply plugin: 'com.android.library'
 apply from: "$rootDir/presentation/base_presentation_module.gradle"
+
+dependencies{
+    implementation 'android.arch.core:core-testing:1.1.1'
+    implementation 'junit:junit:4.12'
+}

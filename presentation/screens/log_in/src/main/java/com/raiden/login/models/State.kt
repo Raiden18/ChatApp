@@ -7,4 +7,8 @@ data class State(
     val logInState: FieldState = FieldState.EmptyState,
     val passwordState: FieldState = FieldState.EmptyState,
     val isButtonEnabled: Boolean = false
-) : CoreState
+) : CoreState{
+    override fun toString(): String {
+        return "$logInState, $passwordState, $isButtonEnabled"
+    }
+}

@@ -4,9 +4,11 @@ import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.domain.validation.strategies.LoginValidationStrategy
 import com.raiden.domain.validation.strategies.PasswordValidationStrategy
+import com.raiden.domain.validation.strategies.ValidationStrategy
 import com.raiden.login.models.Action
 import com.raiden.login.models.Change
 import com.raiden.login.models.State
+import com.raiden.threestatestextinputlayout.FieldState
 import com.raiden.threestatestextinputlayout.FieldValidator
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -32,19 +34,14 @@ class MviIntent : CoreMviIntent<Action, State>() {
     override fun bindActions() {
         val loginInput = actions.ofType<Action.InputLogIn>()
             .map { it.logIn }
-            .map {
-                fieldValidator.setStrategy(LoginValidationStrategy(it))
-                fieldValidator.validate()
-            }
+            .map { LoginValidationStrategy(it) }
+            .map { validateField(it) }
             .map { Change.Login(it) }
 
         val passwordInput = actions.ofType<Action.InputPassword>()
             .map { it.password }
-            .doOnNext { }
-            .map {
-                fieldValidator.setStrategy(PasswordValidationStrategy(it))
-                fieldValidator.validate()
-            }
+            .map { PasswordValidationStrategy(it) }
+            .map { validateField(it) }
             .map { Change.Password(it) }
 
         val buttonState = Observable.combineLatest(
@@ -55,12 +52,14 @@ class MviIntent : CoreMviIntent<Action, State>() {
             })
             .map { Change.LogInButton(it) }
 
-        val allChanges = Observable.merge(loginInput, passwordInput, buttonState)
-
-        disposables += allChanges
+        disposables += Observable.merge(loginInput, passwordInput, buttonState)
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::setValue)
+    }
 
+    private fun validateField(validationStrategy: ValidationStrategy): FieldState {
+        fieldValidator.setStrategy(validationStrategy)
+        return fieldValidator.validate()
     }
 }
