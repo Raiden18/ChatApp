@@ -16,42 +16,50 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
-                    android:id="@+id/log_in_field_layout"
-                    style="@style/TextInputLayoutStyle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/log_in_field_edit_text"
-                        style="@style/InputEditText.LogIn" />
-                </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
-
-                <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
-                    android:id="@+id/password_field_layout"
-                    style="@style/TextInputLayoutStyle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/password_field_edit_text"
-                        style="@style/InputEditText.Password" />
-                </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
-
-
-                <Button
-                    android:id="@+id/log_in_button"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/log_in" />
-            </LinearLayout>
-        </ScrollView>
+                    android:orientation="vertical">
+
+                    <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
+                        android:id="@+id/log_in_field_layout"
+                        style="@style/TextInputLayoutStyle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/log_in_field_edit_text"
+                            style="@style/InputEditText.LogIn" />
+                    </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
+
+                    <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
+                        android:id="@+id/password_field_layout"
+                        style="@style/TextInputLayoutStyle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password_field_edit_text"
+                            style="@style/InputEditText.Password" />
+                    </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
+
+
+                    <Button
+                        android:id="@+id/log_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="14dp"
+                        android:text="@string/log_in" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
     </com.raiden.core.widgets.loader.Loader>
 </LinearLayout>

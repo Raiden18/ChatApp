@@ -2,7 +2,6 @@ package com.raiden.login.view
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import com.raiden.core.extensions.addTextChangedListener
 import com.raiden.core.extensions.hideKeyboard
 import com.raiden.core.extensions.setOnclickListener

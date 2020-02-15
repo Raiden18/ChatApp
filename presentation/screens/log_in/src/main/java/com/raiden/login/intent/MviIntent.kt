@@ -1,5 +1,6 @@
 package com.raiden.login.intent
 
+import android.util.Log
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.domain.usecases.login.LogInUseCase
@@ -35,13 +36,14 @@ class MviIntent(
                 error = null,
                 isShowLoader = false
             )
-            is Change.LogInButton -> state.copy(
+            is Change.LogInButtonState -> state.copy(
                 isButtonEnabled = change.isEnabled,
                 error = null,
                 isShowLoader = false
             )
             is Change.LogInError -> state.copy(error = change.error, isShowLoader = false)
             is Change.ShowLoader -> state.copy(error = null, isShowLoader = true)
+            is Change.HideLoading -> state.copy(error = null, isShowLoader = false)
         }
     }
     private val fieldValidator = FieldValidator()
@@ -73,16 +75,18 @@ class MviIntent(
             BiFunction { logIn: Change.Login, password: Change.Password ->
                 return@BiFunction logIn.isFieldValid() && password.isFieldValid()
             })
-            .map { Change.LogInButton(it) }
+            .map { Change.LogInButtonState(it) }
 
         val logIn = actions.ofType<Action.LogIn>()
             .debounce(500, TimeUnit.MILLISECONDS)
             .switchMap {
                 logInUseCase.invoke(email, password)
                     .toObservable()
-                    .map<Change> { Change.Login(FieldState.ValidState) }
+                    .map<Change> { Change.HideLoading }
+                    .doOnNext { Log.i("HUI", "OPEN PROFILE") }
                     .onErrorReturn { Change.LogInError(it) }
                     .startWith(Change.ShowLoader)
+
             }
 
         disposables += Observable.merge(
