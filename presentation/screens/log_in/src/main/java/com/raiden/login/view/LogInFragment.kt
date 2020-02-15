@@ -33,7 +33,7 @@ class LogInFragment : CoreMviFragment<Action, State>(R.layout.fragment_login) {
     override fun renderState(state: State) {
         with(state) {
             log_in_field_layout.renderState(state.logInState, R.string.wrong_login)
-            password_field_layout.renderState(state.passowordState, R.string.wrong_password)
+            password_field_layout.renderState(state.passwordState, R.string.wrong_password)
             log_in_button.isEnabled = isButtonEnabled
         }
     }

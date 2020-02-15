@@ -3,4 +3,6 @@ apply from: "$rootDir/presentation/base_presentation_module.gradle"
 
 dependencies {
     implementation project (":presentation:core")
+    implementation project (":domain")
+    implementation project (":data")
 }
