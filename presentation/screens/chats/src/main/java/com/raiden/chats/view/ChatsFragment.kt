@@ -1,4 +1,4 @@
-package com.raiden.chats
+package com.raiden.chats.view
 
 import androidx.fragment.app.Fragment
 

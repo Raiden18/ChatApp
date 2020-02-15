@@ -1,7 +1,7 @@
 package com.raiden.quickvloxchat.navigation.screens
 
 import androidx.fragment.app.Fragment
-import com.raiden.chats.ChatsFragment
+import com.raiden.chats.view.ChatsFragment
 import com.raiden.login.view.LogInFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
