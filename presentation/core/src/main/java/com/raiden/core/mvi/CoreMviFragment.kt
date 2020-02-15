@@ -15,7 +15,7 @@ abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
 
     abstract val mviIntent: CoreMviIntent<A, S>
 
-    abstract fun renderState(state: S): ViewState
+    abstract fun renderState(state: S)
 
     abstract fun initAction(): A
 
@@ -35,8 +35,7 @@ abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mviIntent.observableState.observe(viewLifecycleOwner, Observer {
-            val viewState = renderState(it)
-            viewState.render()
+            renderState(it)
         })
 
         mviIntent.dispatch(initAction())

@@ -1,4 +1,6 @@
 <resources>
     <string name="log_in">Login</string>
     <string name="password">Password</string>
+    <string name="wrong_login">Wrong Login</string>
+    <string name="wrong_password">Wrong password</string>
 </resources>

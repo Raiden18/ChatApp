@@ -20,6 +20,8 @@ abstract class CoreMviIntent<A : CoreAction, S : CoreState>: ViewModel(){
         }
     }
 
+    abstract fun bindActions()
+
     fun dispatch(action: A) {
         MviLogger.log("MVI: Received action: $action")
         actions.onNext(action)
