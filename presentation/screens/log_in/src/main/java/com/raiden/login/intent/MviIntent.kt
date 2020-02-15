@@ -1,6 +1,5 @@
 package com.raiden.login.intent
 
-import android.util.Log
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.domain.usecases.login.LogInUseCase
@@ -20,7 +19,8 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class MviIntent(
-    private val logInUseCase: LogInUseCase
+    private val logInUseCase: LogInUseCase,
+    private val logInEventListener: LogInEventListener
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State()
 
@@ -83,10 +83,9 @@ class MviIntent(
                 logInUseCase.invoke(email, password)
                     .toObservable()
                     .map<Change> { Change.HideLoading }
-                    .doOnNext { Log.i("HUI", "OPEN PROFILE") }
+                    .doOnNext { logInEventListener.onLogInClick() }
                     .onErrorReturn { Change.LogInError(it) }
                     .startWith(Change.ShowLoader)
-
             }
 
         disposables += Observable.merge(

@@ -6,6 +6,7 @@ import com.raiden.login.di.LOG_IN_MODULE
 import com.raiden.quickvloxchat.activity.MAIN_ACTIVITY_MODULE
 import com.raiden.quickvloxchat.di.DATA_DEPENDENCIES
 import com.raiden.quickvloxchat.di.DOMAIN_DEPENDENCIES
+import com.raiden.quickvloxchat.di.NAVIGATION_MODULE
 import com.raiden.quickvloxchat.di.PRESENTATION_DEPENDENCIES
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -27,6 +28,7 @@ class ChatApplication : Application() {
                     DOMAIN_DEPENDENCIES,
                     DATA_DEPENDENCIES,
                     PRESENTATION_DEPENDENCIES,
+                    NAVIGATION_MODULE,
                     MAIN_ACTIVITY_MODULE,
                     LOG_IN_MODULE
                 )

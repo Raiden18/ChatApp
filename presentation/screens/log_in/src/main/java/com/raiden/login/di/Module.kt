@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val LOG_IN_MODULE = module {
     scope(named<LogInFragment>()) {
-        viewModel { MviIntent(get()) }
+        viewModel { MviIntent(get(), get()) }
 
         scoped<ShowErrorDialog> { ShowErrorDialogImpl() }
     }
