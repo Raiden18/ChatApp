@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">core</string>
+    <string name="log_in">Login</string>
+    <string name="password">Password</string>
 </resources>

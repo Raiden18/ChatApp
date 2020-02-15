@@ -2,10 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOGIN SCREEN" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
+                android:id="@+id/log_in_field_layout"
+                style="@style/TextInputLayoutStyle">
+
+                <EditText
+                    android:id="@+id/log_in_field_edit_text"
+                    style="@style/InputEditText.LogIn" />
+            </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
+
+            <com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout
+                android:id="@+id/password_field_layout"
+                style="@style/TextInputLayoutStyle">
+
+                <EditText
+                    android:id="@+id/password_field_edit_text"
+                    style="@style/InputEditText.Password" />
+            </com.raiden.threestatestextinputlayout.ThreeStatesTextInputLayout>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14dp"
+                android:text="@string/log_in" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

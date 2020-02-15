@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextInputLayoutStyle" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textSize">11sp</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="hintTextAppearance">@style/InputLayoutHint</item>
+        <item name="errorEnabled">true</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">14dp</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="InputLayoutHint" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="InputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/darker_gray</item>
+        <item name="colorControlHighlight">@android:color/holo_red_dark</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:importantForAutofill">no</item>
+    </style>
+
+    <style name="InputEditText.LogIn" parent="InputEditText">
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:hint">@string/log_in</item>
+    </style>
+
+    <style name="InputEditText.Password" parent="InputEditText">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:hint">@string/password</item>
+    </style>
+</resources>
