@@ -12,4 +12,8 @@ sealed class Change {
     }
 
     data class LogInButton(val isEnabled: Boolean) : Change()
+
+    data class LogInError(val error: Throwable) : Change()
+
+    object ShowLoader: Change()
 }

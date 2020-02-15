@@ -7,5 +7,7 @@ dependencies {
     implementation "com.quickblox:quickblox-android-sdk-messages:$versions.quickblox"
     implementation "com.quickblox:quickblox-android-sdk-content:$versions.quickblox"
     implementation "com.quickblox:quickblox-android-sdk-extensions:$versions.quickblox"
+
+    implementation project(":domain")
 }
 

@@ -1,6 +1,7 @@
-package com.raiden.data.quickblox
+package com.raiden.data.frameworks.quickblox
 
 import android.app.Application
+import android.util.Log
 import com.quickblox.auth.session.QBSettings
 import com.quickblox.chat.QBChatService
 
@@ -25,6 +26,7 @@ class QuickbloxInitter(private val application: Application) {
             init(application, APP_ID, AUTH_KEY, AUTH_SECRET)
             accountKey = ACCOUNT_KEY
         }
+        Log.i("HUI", "INIT QUICKBLOX")
     }
 
     private fun initChatService() {
