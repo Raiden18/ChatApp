@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Toolbar
+        android:id="@+id/chats_toolbar"
+        style="@style/Toolbar.BackNavigation"
+        android:title="@string/app_name" />
+
     <com.raiden.core.widgets.loader.Loader
         android:id="@+id/chats_loader"
         android:layout_width="match_parent"
