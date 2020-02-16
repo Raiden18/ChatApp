@@ -10,14 +10,14 @@ import androidx.lifecycle.Observer
 
 abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
     @LayoutRes private val layoutID: Int
-): Fragment()  {
+) : Fragment() {
 
 
     abstract val mviIntent: CoreMviIntent<A, S>
 
     abstract fun renderState(state: S)
 
-    abstract fun initAction(): A
+    abstract fun initAction(): A?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +39,9 @@ abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
             renderState(it)
         })
 
-        mviIntent.dispatch(initAction())
+        val action = initAction()
+        if (action != null) {
+            mviIntent.dispatch(action)
+        }
     }
 }

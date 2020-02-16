@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 val CHATS_MODULE = module {
     scope(named<ChatsFragment>()) {
-        viewModel { ChatsMviIntent(get()) }
+        viewModel { ChatsMviIntent(get(), get()) }
     }
 }

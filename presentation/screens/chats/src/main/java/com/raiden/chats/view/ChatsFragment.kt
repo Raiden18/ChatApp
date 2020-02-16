@@ -1,5 +1,6 @@
 package com.raiden.chats.view
 
+import android.os.Bundle
 import android.view.View
 import com.raiden.chats.R
 import com.raiden.chats.intent.ChatsMviIntent
@@ -24,6 +25,15 @@ class ChatsFragment : CoreMviFragment<Action, State>(R.layout.fragment_chats) {
                 isShowLoading -> renderLoading()
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        chats_toolbar.menu.getItem(0).setOnMenuItemClickListener {
+            mviIntent.dispatch(Action.OpenSearch)
+            true
+        }
+        chats_toolbar.setNavigationOnClickListener { mviIntent.dispatch(Action.GoBack) }
     }
 
     override fun initAction(): Action = Action.LoadChats

@@ -6,4 +6,6 @@
     <string name="wrong_password">Wrong password</string>
     <string name="lentach_smile">¯\\_(ツ)_/¯</string>
     <string name="search">Search</string>
+    <string name="email_of_user">User\'s email</string>
+    <string name="users_were_not_found">Users weren\'t found :(</string>
 </resources>

@@ -9,6 +9,7 @@ import com.raiden.quickvloxchat.di.DATA_DEPENDENCIES
 import com.raiden.quickvloxchat.di.DOMAIN_DEPENDENCIES
 import com.raiden.quickvloxchat.di.NAVIGATION_MODULE
 import com.raiden.quickvloxchat.di.PRESENTATION_DEPENDENCIES
+import com.raiden.search.di.SEARCH_MODULE
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -32,7 +33,8 @@ class ChatApplication : Application() {
                     NAVIGATION_MODULE,
                     MAIN_ACTIVITY_MODULE,
                     LOG_IN_MODULE,
-                    CHATS_MODULE
+                    CHATS_MODULE,
+                    SEARCH_MODULE
                 )
             )
         }

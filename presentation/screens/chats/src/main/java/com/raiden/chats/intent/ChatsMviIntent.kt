@@ -6,12 +6,14 @@ import com.raiden.chats.models.State
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.domain.usecases.chat.get.GetAllChatsUseCase
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 
 class ChatsMviIntent(
-    private val getAllChatsUseCase: GetAllChatsUseCase
+    private val getAllChatsUseCase: GetAllChatsUseCase,
+    private val chatsEventListener: ChatsEventListener
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State()
 
@@ -30,6 +32,11 @@ class ChatsMviIntent(
             is Change.ShowLoading -> state.copy(
                 isShowLoading = true
             )
+            is Change.Idle -> state.copy(
+                chats = state.chats,
+                isShowLoading = false,
+                error = null
+            )
         }
     }
 
@@ -47,7 +54,15 @@ class ChatsMviIntent(
                     .startWith(Change.ShowLoading)
             }
 
-        disposables += chats
+        val onSearchClick = actions.ofType<Action.OpenSearch>()
+            .map<Change> { Change.Idle }
+            .doOnNext { chatsEventListener.onSearchClick() }
+
+        val goBackClick = actions.ofType<Action.GoBack>()
+            .map<Change> { Change.Idle }
+            .doOnNext { chatsEventListener.goBack() }
+
+        disposables += Observable.merge(chats, onSearchClick, goBackClick)
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::setValue, Timber::e)

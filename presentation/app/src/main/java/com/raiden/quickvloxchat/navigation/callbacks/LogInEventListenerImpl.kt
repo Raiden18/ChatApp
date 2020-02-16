@@ -7,6 +7,7 @@ import ru.terrakok.cicerone.Router
 class LogInEventListenerImpl(
     private val router: Router
 ) : LogInEventListener {
+
     override fun onLogInClick() {
         router.navigateTo(Screen.Chats())
     }

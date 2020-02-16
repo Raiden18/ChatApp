@@ -6,9 +6,7 @@ import com.raiden.chats.models.Action
 import com.raiden.chats.models.State
 import com.raiden.domain.models.Chat
 import com.raiden.domain.usecases.chat.get.GetAllChatsUseCase
-import io.mockk.every
-import io.mockk.spyk
-import io.mockk.verifyOrder
+import io.mockk.*
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -18,12 +16,13 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
     private lateinit var chatsMviIntent: ChatsMviIntent
     private lateinit var getAllChatsUseCase: GetAllChatsUseCase
     private lateinit var observer: Observer<State>
-
+    private lateinit var chatsEventListener: ChatsEventListener
     @Before
     fun setUp() {
         getAllChatsUseCase = spyk()
         observer = spyk()
-        chatsMviIntent = ChatsMviIntent(getAllChatsUseCase)
+        chatsEventListener = spyk()
+        chatsMviIntent = ChatsMviIntent(getAllChatsUseCase, chatsEventListener)
         chatsMviIntent.observableState.observeForever(observer)
     }
 
@@ -55,4 +54,43 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
             observer.onChanged(expectedState)
         }
     }
+
+    @Test
+    fun `Should send onSearch event when that action was sent`() {
+        //Given
+        every {
+            getAllChatsUseCase()
+        } returns Single.just(emptyList())
+        val expectedState = State(emptyList(), false, null)
+
+        //When
+        chatsMviIntent.dispatch(Action.OpenSearch)
+        testSchedulerRule.triggerActions()
+
+        //Then
+        verifyOrder {
+            observer.onChanged(expectedState)
+            chatsEventListener.onSearchClick()
+        }
+    }
+
+    @Test
+    fun `Should send onBack event when that action was sent`(){
+        //Given
+        every {
+            getAllChatsUseCase()
+        } returns Single.just(emptyList())
+        val expectedState = State(emptyList(), false, null)
+
+        //When
+        chatsMviIntent.dispatch(Action.GoBack)
+        testSchedulerRule.triggerActions()
+
+        //Then
+        verifyOrder {
+            observer.onChanged(expectedState)
+            chatsEventListener.goBack()
+        }
+    }
+
 }

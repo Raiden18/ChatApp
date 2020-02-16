@@ -5,5 +5,6 @@ import com.raiden.domain.models.Chat
 sealed class Change {
     object EmptyChats : Change()
     object ShowLoading : Change()
+    object Idle : Change()
     data class ShowChats(val chats: List<Chat>) : Change()
 }
