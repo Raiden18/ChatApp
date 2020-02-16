@@ -9,7 +9,7 @@ class ActivityViewModel(
 ) : ViewModel() {
 
     init {
-        router.navigateTo(Screen.LogIn())
+        router.navigateTo(Screen.Chats())
     }
 
 }

@@ -1,5 +1,8 @@
 package com.raiden.chats.view
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import com.raiden.chats.R
 import com.raiden.chats.intent.ChatsMviIntent

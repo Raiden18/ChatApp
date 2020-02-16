@@ -22,6 +22,7 @@ abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        setHasOptionsMenu(true)
     }
 
     final override fun onCreateView(

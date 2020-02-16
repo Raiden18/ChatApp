@@ -1,8 +1,9 @@
 <resources>
+    <string name="app_name">QuickVlox</string>
     <string name="log_in">Login</string>
     <string name="password">Password</string>
     <string name="wrong_login">Wrong Login</string>
     <string name="wrong_password">Wrong password</string>
     <string name="lentach_smile">¯\\_(ツ)_/¯</string>
-    <string name="app_name">QuickVlox</string>
+    <string name="search">Search</string>
 </resources>
