@@ -6,7 +6,10 @@ include ':presentation:app',
         //Screens
         ':presentation:screens:log_in',
         ':presentation:screens:chats',
+        ':presentation:screens:search'
+
+
         //Widgets
-        ':presentation:widgets:three_states_text_input_layout'
+include ':presentation:widgets:three_states_text_input_layout'
 
 rootProject.name = 'QuickvloxChat'
