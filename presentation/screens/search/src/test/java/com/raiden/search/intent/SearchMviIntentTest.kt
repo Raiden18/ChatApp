@@ -72,7 +72,7 @@ class SearchMviIntentTest : BaseMviIntentTest() {
             false
         )
         every {
-            searchUserByEmailUseCase(any())
+            searchUserByEmailUseCase(any(), any())
         } returns Observable.empty()
 
         //When

@@ -26,7 +26,6 @@ class QuickbloxInitter(private val application: Application) {
             init(application, APP_ID, AUTH_KEY, AUTH_SECRET)
             accountKey = ACCOUNT_KEY
         }
-        Log.i("HUI", "INIT QUICKBLOX")
     }
 
     private fun initChatService() {

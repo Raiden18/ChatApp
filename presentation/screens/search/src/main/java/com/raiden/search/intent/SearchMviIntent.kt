@@ -8,7 +8,6 @@ import com.raiden.search.models.Action
 import com.raiden.search.models.Change
 import com.raiden.search.models.State
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
@@ -55,7 +54,7 @@ class SearchMviIntent(
             .map { it.email }
             .debounce(500, TimeUnit.MILLISECONDS, schedulerProvider.io())
             .flatMap {
-                searchUserByEmailUseCase.invoke(it)
+                searchUserByEmailUseCase.invoke(it, 0) // Implement pager
                     .map<Change> { users -> Change.ShowContent(users) }
                     .defaultIfEmpty(Change.EmptySearchResult)
                     .startWith(Change.ShowLoader)
@@ -65,6 +64,6 @@ class SearchMviIntent(
         disposables += Observable.merge(goBack, searchUsers, idle)
             .scan(initialState, reducer)
             .distinctUntilChanged()
-            .subscribe(state::setValue, Timber::e)
+            .subscribe(state::postValue, Timber::e)
     }
 }

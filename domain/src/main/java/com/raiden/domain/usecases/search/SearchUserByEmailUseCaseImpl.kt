@@ -12,11 +12,8 @@ class SearchUserByEmailUseCaseImpl(
         const val USERS_PER_PAGE = 50
     }
 
-    private var currentPage = 0
-
-    override fun invoke(email: String): Observable<ArrayList<User>> {
-        return usersGateway.getUsers(currentPage, USERS_PER_PAGE)
-            .doOnSuccess { currentPage++ }
+    override fun invoke(email: String, page: Int): Observable<ArrayList<User>> {
+        return usersGateway.getUsers(page, USERS_PER_PAGE)
             .toObservable()
             .flatMap { Observable.fromIterable(it) }
             .filter {
