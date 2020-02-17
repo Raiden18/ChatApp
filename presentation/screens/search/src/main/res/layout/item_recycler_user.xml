@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:foreground="?selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="8dp"
@@ -15,8 +18,8 @@
         android:background="@drawable/circle"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="34sp"
-        tools:text="A" />
+        android:textSize="24sp"
+        tools:text="Q" />
 
     <TextView
         android:id="@+id/item_recycler_user_email"
@@ -24,6 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="18sp"
         tools:text="android@android.com" />
 </LinearLayout>

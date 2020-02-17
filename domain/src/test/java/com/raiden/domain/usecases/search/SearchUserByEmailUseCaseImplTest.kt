@@ -40,4 +40,26 @@ class SearchUserByEmailUseCaseImplTest {
         //Then
         assertEquals(expectedUserSize, results.size)
     }
+
+    @Test
+    fun `Should return empty if request is empty`() {
+        //Given
+        val users = arrayListOf<User>(
+            User("emaiL1@gmail.com", ""),
+            User("emaIl2@gmail.com ", ""),
+            User("email3@gmail.com", ""),
+            User(" 123234@gmail.com", "")
+        )
+        val emailRequest = ""
+        val expectedUserSize = 0
+        every {
+            chatGateway.getUsers(any(), any())
+        } returns Single.just(users)
+
+        //When
+        val results = searchUserByEmailUseCase.invoke(emailRequest, 0).blockingFirst()
+
+        //Then
+        assertEquals(expectedUserSize, results.size)
+    }
 }

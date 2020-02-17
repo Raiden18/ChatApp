@@ -1,17 +1,21 @@
 package com.raiden.search.view.widgets.recycler
 
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateLayoutContainer
-import com.raiden.domain.models.User
+import com.raiden.core.extensions.setOnclickListener
 import com.raiden.search.R
+import com.raiden.search.models.UserViewModel
 import kotlinx.android.synthetic.main.item_recycler_user.view.*
 
 internal fun userAdapterDelegate(
-) = adapterDelegateLayoutContainer<User, User>(R.layout.item_recycler_user) {
+    onUserClick: (UserViewModel) -> Unit
+) = adapterDelegateLayoutContainer<UserViewModel, UserViewModel>(R.layout.item_recycler_user) {
+
+    itemView.setOnclickListener {
+        onUserClick(item)
+    }
 
     bind {
-        val user = item
-        val emailFirstLetter = user.email[0].toString()
-        itemView.item_recycler_user_letter.text = emailFirstLetter
-        itemView.item_recycler_user_email.text = user.email
+        itemView.item_recycler_user_letter.text = item.firstLetter
+        itemView.item_recycler_user_email.text = item.user.email
     }
 }

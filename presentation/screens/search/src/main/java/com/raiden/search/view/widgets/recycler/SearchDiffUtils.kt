@@ -1,17 +1,17 @@
 package com.raiden.search.view.widgets.recycler
 
 import androidx.recyclerview.widget.DiffUtil
-import com.raiden.domain.models.User
+import com.raiden.search.models.UserViewModel
 
-internal class SearchDiffUtils : DiffUtil.ItemCallback<User>() {
+internal class SearchDiffUtils : DiffUtil.ItemCallback<UserViewModel>() {
 
-    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
-        return oldItem.email == newItem.email
+    override fun areItemsTheSame(oldItem: UserViewModel, newItem: UserViewModel): Boolean {
+        return oldItem.user.email == newItem.user.email
     }
 
-    override fun getChangePayload(oldItem: User, newItem: User): Any? = Any()
+    override fun getChangePayload(oldItem: UserViewModel, newItem: UserViewModel): Any? = Any()
 
-    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+    override fun areContentsTheSame(oldItem: UserViewModel, newItem: UserViewModel): Boolean {
         return oldItem == newItem
     }
 }

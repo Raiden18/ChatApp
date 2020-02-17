@@ -5,11 +5,11 @@ import android.view.View
 import com.raiden.core.extensions.addTextChangedListener
 import com.raiden.core.mvi.CoreMviFragment
 import com.raiden.core.mvi.CoreMviIntent
-import com.raiden.domain.models.User
 import com.raiden.search.R
 import com.raiden.search.intent.SearchMviIntent
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
+import com.raiden.search.models.UserViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +23,7 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         super.onViewCreated(view, savedInstanceState)
         search_toolbar.setNavigationOnClickListener { mviIntent.dispatch(Action.GoBack) }
         search_edit_tet.addTextChangedListener { mviIntent.dispatch(Action.Search(it)) }
+        search_users.onUserClick = { } // TODO add dispatch
     }
 
     override fun renderState(state: State) {
@@ -55,7 +56,7 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         search_users.visibility = View.INVISIBLE
     }
 
-    private fun renderContent(users: List<User>) {
+    private fun renderContent(users: List<UserViewModel>) {
         hideEmptyMessage()
         search_users.visibility = View.VISIBLE
         search_users.updateUsers(users)

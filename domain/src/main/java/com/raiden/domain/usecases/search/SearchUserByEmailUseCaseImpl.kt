@@ -16,6 +16,7 @@ class SearchUserByEmailUseCaseImpl(
         return usersGateway.getUsers(page, USERS_PER_PAGE)
             .toObservable()
             .flatMap { Observable.fromIterable(it) }
+            .filter { email.isNotEmpty() }
             .filter {
                 val preparedFilterableEmail = it.email.toLowerCase().trim()
                 val preparedEmail = email.toLowerCase().trim()

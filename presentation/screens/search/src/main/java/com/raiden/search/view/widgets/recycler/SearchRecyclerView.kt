@@ -4,22 +4,23 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.raiden.domain.models.User
+import com.raiden.search.models.UserViewModel
 
 internal class SearchRecyclerView(
     context: Context,
     attributeSet: AttributeSet
 ) : RecyclerView(context, attributeSet) {
+    lateinit var onUserClick: (UserViewModel) -> Unit
 
     private val searchAdapter by lazy {
-        SearchRecyclerAdapter()
+        SearchRecyclerAdapter(onUserClick)
     }
 
     init {
         layoutManager = LinearLayoutManager(context, VERTICAL, false)
     }
 
-    fun updateUsers(users: List<User>) {
+    fun updateUsers(users: List<UserViewModel>) {
         initAdapter()
         searchAdapter.items = users
     }

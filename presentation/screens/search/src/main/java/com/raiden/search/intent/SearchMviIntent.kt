@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit
 class SearchMviIntent(
     private val searchEventListener: SearchEventListener,
     private val searchUserByEmailUseCase: SearchUserByEmailUseCase,
-    private val schedulerProvider: SchedulerProvider
+    private val schedulerProvider: SchedulerProvider,
+    private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State(idle = true)
     private val reducer: Reducer<State, Change> = { state, change ->
@@ -55,6 +56,10 @@ class SearchMviIntent(
             .debounce(500, TimeUnit.MILLISECONDS, schedulerProvider.io())
             .flatMap {
                 searchUserByEmailUseCase.invoke(it, 0) // Implement pager
+                    .flatMap { Observable.fromIterable(it) }
+                    .map { userViewModelConverter.convert(it) }
+                    .toList()
+                    .toObservable()
                     .map<Change> { users -> Change.ShowContent(users) }
                     .defaultIfEmpty(Change.EmptySearchResult)
                     .startWith(Change.ShowLoader)
