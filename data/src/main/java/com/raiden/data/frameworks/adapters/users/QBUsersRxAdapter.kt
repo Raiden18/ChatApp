@@ -5,4 +5,6 @@ import io.reactivex.Single
 
 interface QBUsersRxAdapter {
     fun logIn(login: String, password: String): Single<QBUser>
+
+    fun getUsers(page: Int, perPage: Int): Single<ArrayList<QBUser>>
 }

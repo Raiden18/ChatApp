@@ -1,10 +1,12 @@
 package com.raiden.search.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.raiden.core.extensions.addTextChangedListener
 import com.raiden.core.mvi.CoreMviFragment
 import com.raiden.core.mvi.CoreMviIntent
+import com.raiden.domain.models.User
 import com.raiden.search.R
 import com.raiden.search.intent.SearchMviIntent
 import com.raiden.search.models.Action
@@ -37,7 +39,7 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         with(state) {
             when {
                 users.isEmpty() -> renderEmptyContent()
-                users.isNotEmpty() -> renderContent()
+                users.isNotEmpty() -> renderContent(users)
                 isShowLoader -> renderLoader()
                 error != null -> renderError()
             }
@@ -53,8 +55,11 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         search_empty_message.visibility = View.VISIBLE
     }
 
-    private fun renderContent() {
+    private fun renderContent(users: List<User>) {
         hideEmptyMessage()
+        users.forEach {
+            Log.i("HUI", it.email)
+        }
     }
 
     private fun renderError() {

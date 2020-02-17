@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 val SEARCH_MODULE = module {
     scope(named<SearchFragment>()) {
-        viewModel { SearchMviIntent(get(), get()) }
+        viewModel { SearchMviIntent(get(), get(), get()) }
     }
 }

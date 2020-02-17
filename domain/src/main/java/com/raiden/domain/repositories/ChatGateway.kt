@@ -6,4 +6,5 @@ import io.reactivex.Single
 
 interface ChatGateway {
     fun logIn(login: String, password: String): Single<User>
+    fun getUsers(page: Int, perPage: Int): Single<ArrayList<User>>
 }

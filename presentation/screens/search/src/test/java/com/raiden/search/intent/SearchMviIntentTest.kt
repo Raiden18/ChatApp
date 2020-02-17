@@ -2,6 +2,7 @@ package com.raiden.search.intent
 
 import androidx.lifecycle.Observer
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
+import com.raiden.core.utils.rx.schedule.SchedulerProvider
 import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
@@ -9,8 +10,10 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verifyOrder
 import io.reactivex.Observable
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 class SearchMviIntentTest : BaseMviIntentTest() {
 
@@ -18,12 +21,21 @@ class SearchMviIntentTest : BaseMviIntentTest() {
     private lateinit var searchMviIntent: SearchMviIntent
     private lateinit var observer: Observer<State>
     private lateinit var searchUserByEmailUseCase: SearchUserByEmailUseCase
+    private lateinit var schedulerProvider: SchedulerProvider
+    private lateinit var testScheduler: TestScheduler
+
     @Before
     fun setUp() {
         searchEventListener = spyk()
         observer = spyk()
         searchUserByEmailUseCase = spyk()
-        searchMviIntent = SearchMviIntent(searchEventListener, searchUserByEmailUseCase)
+        schedulerProvider = spyk()
+        testScheduler = TestScheduler()
+        every {
+            schedulerProvider.io()
+        } returns testScheduler
+        searchMviIntent =
+            SearchMviIntent(searchEventListener, searchUserByEmailUseCase, schedulerProvider)
         searchMviIntent.observableState.observeForever(observer)
     }
 
@@ -66,6 +78,7 @@ class SearchMviIntentTest : BaseMviIntentTest() {
         //When
         searchMviIntent.dispatch(Action.Search(searchRequest))
         testSchedulerRule.triggerActions()
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
 
         //Then
         verifyOrder {

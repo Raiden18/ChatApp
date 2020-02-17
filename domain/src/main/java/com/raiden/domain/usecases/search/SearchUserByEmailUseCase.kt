@@ -5,5 +5,5 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 interface SearchUserByEmailUseCase {
-    operator fun invoke(email: String): Observable<List<User>>
+    operator fun invoke(email: String): Observable<ArrayList<User>>
 }
