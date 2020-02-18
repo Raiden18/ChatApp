@@ -6,7 +6,7 @@ import com.raiden.search.models.UserViewModel
 
 class UserViewModelConverterImpl : UserViewModelConverter {
     override fun convert(user: User): UserViewModel {
-        val firstLetter = user.email.first().toString().toUpperCase()
+        val firstLetter = user.fullName.first().toString().toUpperCase()
         return UserViewModel(firstLetter, user)
     }
 }

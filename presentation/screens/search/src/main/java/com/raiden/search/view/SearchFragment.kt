@@ -27,27 +27,17 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     override fun renderState(state: State) {
-        with(state) {
-            when {
-                idle -> renderIdle()
-                else -> renderChangedContent(state)
-            }
-        }
-    }
-
-    private fun renderChangedContent(state: State) {
-        with(state) {
-            when {
-                users.isEmpty() -> renderEmptyContent()
-                users.isNotEmpty() -> renderContent(users)
-                isShowLoader -> renderLoader()
-                error != null -> renderError()
-            }
+        when (state) {
+            is State.Idle -> renderIdle()
+            is State.ContentState -> renderContent(state.users)
+            is State.LoaderState -> renderLoader()
+            is State.ErrorState -> renderError()
+            is State.EmptyState -> renderEmptyContent()
         }
     }
 
     private fun renderLoader() {
-        hideEmptyMessage()
+
     }
 
     private fun renderEmptyContent() {
@@ -67,7 +57,8 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     private fun renderIdle() {
-
+        search_users.updateUsers(emptyList())
+        hideEmptyMessage()
     }
 
     override fun initAction(): Action? = Action.Idle

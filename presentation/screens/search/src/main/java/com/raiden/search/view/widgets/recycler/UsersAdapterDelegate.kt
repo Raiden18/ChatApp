@@ -15,6 +15,7 @@ internal fun userAdapterDelegate(
     }
 
     bind {
+        itemView.item_recycler_user_name.text = item.user.fullName
         itemView.item_recycler_user_letter.text = item.firstLetter
         itemView.item_recycler_user_email.text = item.user.email
     }

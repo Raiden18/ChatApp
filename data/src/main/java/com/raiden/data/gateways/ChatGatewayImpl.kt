@@ -9,11 +9,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 class ChatGatewayImpl(
     private val qbUsersRxAdapter: QBUsersRxAdapter
-    ) : ChatGateway {
+) : ChatGateway {
 
     override fun logIn(login: String, password: String): Single<User> {
         return qbUsersRxAdapter.logIn(login, password)
-            .map { User(it.email, "") }
+            .map { User(it.email, it.fullName) }
             .subscribeOn(AndroidSchedulers.mainThread())
     }
 
@@ -21,7 +21,7 @@ class ChatGatewayImpl(
         return qbUsersRxAdapter.getUsers(page, perPage)
             .toObservable()
             .switchMap { users -> Observable.fromIterable(users) }
-            .map { User(it.email, "") }
+            .map { User(it.email, it.fullName) }
             .toList()
             .map { ArrayList(it) }
             .subscribeOn(AndroidSchedulers.mainThread())

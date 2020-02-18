@@ -19,23 +19,13 @@ class SearchMviIntent(
     private val schedulerProvider: SchedulerProvider,
     private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {
-    override val initialState: State = State(idle = true)
+    override val initialState: State = State.Idle
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.Idle -> state.copy(idle = true)
-            is Change.ShowLoader -> state.copy(isShowLoader = true, error = null, idle = false)
-            is Change.EmptySearchResult -> state.copy(
-                users = emptyList(),
-                isShowLoader = false,
-                error = null,
-                idle = false
-            )
-            is Change.ShowContent -> state.copy(
-                users = change.users,
-                isShowLoader = false,
-                error = null,
-                idle = false
-            )
+            is Change.Idle -> State.Idle
+            is Change.ShowLoader -> State.LoaderState
+            is Change.EmptySearchResult -> State.EmptyState
+            is Change.ShowContent -> State.ContentState(change.users)
         }
     }
 
@@ -53,17 +43,20 @@ class SearchMviIntent(
 
         val searchUsers = actions.ofType<Action.Search>()
             .map { it.email }
-            .debounce(500, TimeUnit.MILLISECONDS, schedulerProvider.io())
-            .flatMap {
-                searchUserByEmailUseCase.invoke(it, 0) // Implement pager
-                    .flatMap { Observable.fromIterable(it) }
-                    .map { userViewModelConverter.convert(it) }
-                    .toList()
-                    .toObservable()
-                    .map<Change> { users -> Change.ShowContent(users) }
-                    .defaultIfEmpty(Change.EmptySearchResult)
-                    .startWith(Change.ShowLoader)
-
+            .debounce(350, TimeUnit.MILLISECONDS, schedulerProvider.io())
+            .switchMap<Change> { email ->
+                if (email.isEmpty())
+                    Observable.just(Change.Idle)
+                else
+                    searchUserByEmailUseCase.invoke(email, 0) // Implement pager
+                        .flatMap { Observable.fromIterable(it) }
+                        .map { userViewModelConverter.convert(it) }
+                        .toList()
+                        .toObservable()
+                        .filter { it.isNotEmpty() }
+                        .map<Change> { Change.ShowContent(it) }
+                        .defaultIfEmpty(Change.EmptySearchResult)
+                        .startWith(Change.ShowLoader)
             }
 
         disposables += Observable.merge(goBack, searchUsers, idle)

@@ -52,7 +52,7 @@ class SearchMviIntentTest : BaseMviIntentTest() {
     @Test
     fun `Should goBack when that action was sent`() {
         //Given
-        val expectedState = State(idle = true)
+        val expectedState = State.Idle
 
         //When
         searchMviIntent.dispatch(Action.GoBack)
@@ -69,21 +69,11 @@ class SearchMviIntentTest : BaseMviIntentTest() {
     fun `Should show empty state if there is empty list of users`() {
         //Given
         val searchRequest = "123123@asdasd.com"
-        val expectedEmptyState = State(
-            emptyList(),
-            false,
-            null,
-            false
-        )
-        val loaderState = State(
-            emptyList(),
-            true,
-            null,
-            false
-        )
+        val expectedEmptyState = State.EmptyState
+        val loaderState = State.LoaderState
         every {
             searchUserByEmailUseCase(any(), any())
-        } returns Observable.empty()
+        } returns Observable.just(arrayListOf())
 
         //When
         searchMviIntent.dispatch(Action.Search(searchRequest))
@@ -103,18 +93,8 @@ class SearchMviIntentTest : BaseMviIntentTest() {
         val searchRequest = "123123@asdasd.com"
         val viewModelUser: UserViewModel = mockk()
         val user: User = mockk()
-        val contentState = State(
-            listOf(viewModelUser),
-            false,
-            null,
-            false
-        )
-        val loaderState = State(
-            emptyList(),
-            true,
-            null,
-            false
-        )
+        val contentState = State.ContentState(listOf(viewModelUser))
+        val loaderState = State.LoaderState
         every {
             searchUserByEmailUseCase(any(), any())
         } returns Observable.just(arrayListOf(user))
@@ -131,6 +111,31 @@ class SearchMviIntentTest : BaseMviIntentTest() {
         verifyOrder {
             observer.onChanged(loaderState)
             observer.onChanged(contentState)
+        }
+    }
+
+    @Test
+    fun `Should show idle state if request is empty`() {
+        //Given
+        val emptySearchRequest = ""
+        val users = arrayListOf<User>(mockk())
+        val userViewModel: UserViewModel = mockk()
+        every {
+            searchUserByEmailUseCase(any(), any())
+        } returns Observable.just(users)
+        every {
+            userViewModelConverter.convert(any())
+        } returns userViewModel
+
+        //When
+        searchMviIntent.dispatch(Action.Search("asdasd"))
+        searchMviIntent.dispatch(Action.Search(emptySearchRequest))
+        testSchedulerRule.triggerActions()
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
+
+        //Then
+        verifyOrder {
+            observer.onChanged(State.Idle)
         }
     }
 }
