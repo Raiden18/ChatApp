@@ -3,6 +3,7 @@ package com.raiden.search.view
 import android.os.Bundle
 import android.view.View
 import com.raiden.core.extensions.addTextChangedListener
+import com.raiden.core.extensions.showKeyboard
 import com.raiden.core.mvi.CoreMviFragment
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.search.R
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+//TODO: add loader
 class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) {
     override val mviIntent: CoreMviIntent<Action, State> by currentScope.viewModel<SearchMviIntent>(
         this
@@ -21,6 +23,8 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        search_edit_tet.requestFocus()
+        search_edit_tet.showKeyboard()
         search_toolbar.setNavigationOnClickListener { mviIntent.dispatch(Action.GoBack) }
         search_edit_tet.addTextChangedListener { mviIntent.dispatch(Action.Search(it)) }
         search_users.onUserClick = { } // TODO add dispatch
@@ -37,28 +41,31 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     private fun renderLoader() {
-
+        search_loader.visibility = View.VISIBLE
     }
 
     private fun renderEmptyContent() {
         search_empty_lentach.visibility = View.VISIBLE
         search_empty_message.visibility = View.VISIBLE
         search_users.visibility = View.INVISIBLE
+        hideLoader()
     }
 
     private fun renderContent(users: List<UserViewModel>) {
         hideEmptyMessage()
+        hideLoader()
         search_users.visibility = View.VISIBLE
         search_users.updateUsers(users)
     }
 
     private fun renderError() {
-
+        hideLoader()
     }
 
     private fun renderIdle() {
         search_users.updateUsers(emptyList())
         hideEmptyMessage()
+        hideLoader()
     }
 
     override fun initAction(): Action? = Action.Idle
@@ -66,5 +73,9 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     private fun hideEmptyMessage() {
         search_empty_lentach.visibility = View.GONE
         search_empty_message.visibility = View.GONE
+    }
+
+    private fun hideLoader() {
+        search_loader.visibility = View.INVISIBLE
     }
 }
