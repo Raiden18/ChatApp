@@ -23,12 +23,12 @@
             android:id="@+id/search_loader"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="14dp"
-            android:outlineProvider="none"
             android:layout_alignTop="@id/search_edit_tet"
             android:layout_alignRight="@id/search_edit_tet"
             android:layout_alignBottom="@id/search_edit_tet"
+            android:layout_marginEnd="14dp"
             android:elevation="4dp"
+            android:outlineProvider="none"
             android:visibility="invisible"
             tools:visibility="visible" />
     </RelativeLayout>
@@ -38,29 +38,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/search_empty_lentach"
-            style="@style/Lentach_smile"
-            android:layout_marginBottom="16dp"
-            android:text="@string/lentach_smile"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/search_empty_message"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/search_empty_message"
-            style="@style/EmptyContentMessage"
-            android:layout_marginTop="8dp"
-            android:text="@string/users_were_not_found"
-            android:visibility="gone"
+        <LinearLayout
+            android:id="@+id/search_empty_message_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/search_users"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_empty_lentach"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="@+id/search_users">
+
+            <TextView
+                android:id="@+id/search_empty_lentach"
+                style="@style/Lentach_smile"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:text="@string/lentach_smile" />
+
+            <TextView
+                android:id="@+id/search_empty_message"
+                style="@style/EmptyContentMessage"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/users_were_not_found" />
+        </LinearLayout>
 
 
         <com.raiden.search.view.widgets.recycler.SearchRecyclerView

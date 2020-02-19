@@ -11,11 +11,12 @@ import com.raiden.search.intent.SearchMviIntent
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
 import com.raiden.search.models.UserViewModel
+import com.raiden.search.view.widgets.emtymessage.animateAppearanceAndDo
+import com.raiden.search.view.widgets.emtymessage.animateHidingAndDo
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-//TODO: add loader
 class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) {
     override val mviIntent: CoreMviIntent<Action, State> by currentScope.viewModel<SearchMviIntent>(
         this
@@ -45,17 +46,17 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     private fun renderEmptyContent() {
-        search_empty_lentach.visibility = View.VISIBLE
-        search_empty_message.visibility = View.VISIBLE
-        search_users.visibility = View.INVISIBLE
-        hideLoader()
+        search_empty_message_container.animateAppearanceAndDo {
+            hideUsers()
+            hideLoader()
+        }
     }
 
     private fun renderContent(users: List<UserViewModel>) {
-        hideEmptyMessage()
-        hideLoader()
-        search_users.visibility = View.VISIBLE
-        search_users.updateUsers(users)
+        search_empty_message_container.animateHidingAndDo {
+            hideLoader()
+            search_users.updateUsers(users)
+        }
     }
 
     private fun renderError() {
@@ -63,19 +64,21 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     private fun renderIdle() {
-        search_users.updateUsers(emptyList())
-        hideEmptyMessage()
         hideLoader()
+        search_empty_message_container.animateHidingAndDo {
+            hideUsers()
+        }
     }
 
     override fun initAction(): Action? = Action.Idle
 
-    private fun hideEmptyMessage() {
-        search_empty_lentach.visibility = View.GONE
-        search_empty_message.visibility = View.GONE
-    }
-
     private fun hideLoader() {
         search_loader.visibility = View.INVISIBLE
     }
+
+    private fun hideUsers(){
+        search_users.updateUsers(emptyList())
+    }
 }
+
+

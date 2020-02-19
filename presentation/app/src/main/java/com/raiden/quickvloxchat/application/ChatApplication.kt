@@ -40,6 +40,11 @@ class ChatApplication : Application() {
         }
     }
 
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+
+    }
     private fun initLogger() {
         MviLogger.enableLogging(object : MviLogger.Logger {
             override fun log(msg: String) {
