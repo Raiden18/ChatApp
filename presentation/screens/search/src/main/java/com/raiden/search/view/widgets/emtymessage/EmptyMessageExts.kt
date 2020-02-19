@@ -3,7 +3,7 @@ package com.raiden.search.view.widgets.emtymessage
 import android.widget.LinearLayout
 import com.raiden.core.utils.ui.SimpleAnimationListener
 
-private const val ANIMATION_DURATION = 400L
+private const val ANIMATION_DURATION = 350L
 
 internal fun LinearLayout.animateAppearanceAndDo(doOnStart: () -> Unit) {
     animate()
