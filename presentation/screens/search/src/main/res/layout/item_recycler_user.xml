@@ -47,5 +47,7 @@
             tools:text="android@android.com" />
     </LinearLayout>
 
-    <ImageView style="@style/ChevronRight" />
+    <ImageView
+        style="@style/ChevronRight"
+        android:paddingTop="6dp" />
 </LinearLayout>
