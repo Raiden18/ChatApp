@@ -53,14 +53,12 @@
                 android:id="@+id/search_empty_lentach"
                 style="@style/Lentach_smile"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
                 android:text="@string/lentach_smile" />
 
             <TextView
                 android:id="@+id/search_empty_message"
                 style="@style/EmptyContentMessage"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
                 android:text="@string/users_were_not_found" />
         </LinearLayout>
 
