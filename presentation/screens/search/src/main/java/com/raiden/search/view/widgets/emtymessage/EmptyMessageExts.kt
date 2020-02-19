@@ -1,7 +1,7 @@
 package com.raiden.search.view.widgets.emtymessage
 
 import android.widget.LinearLayout
-import com.raiden.core.utils.ui.SimpleAnimationListener
+import com.raiden.core.utils.widgets.SimpleAnimationListener
 
 private const val ANIMATION_DURATION = 350L
 

@@ -1,4 +1,4 @@
-package com.raiden.core.utils.ui
+package com.raiden.core.utils.widgets
 
 import android.animation.Animator
 
