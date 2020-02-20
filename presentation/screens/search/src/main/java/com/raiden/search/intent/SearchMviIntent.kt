@@ -45,7 +45,6 @@ class SearchMviIntent(
 
         val searchUsers = actions.ofType<Action.Search>()
             .map { it.email }
-            .cacheWithInitialCapacity(1)
             .distinctUntilChanged()
             .debounce(350, TimeUnit.MILLISECONDS, schedulerProvider.io())
             .switchIfEmpty { Observable.just(Change.Idle) }
