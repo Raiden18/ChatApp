@@ -8,10 +8,7 @@ import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
 import com.raiden.search.models.UserViewModel
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verifyOrder
+import io.mockk.*
 import io.reactivex.Observable
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
@@ -136,6 +133,80 @@ class SearchMviIntentTest : BaseMviIntentTest() {
         //Then
         verifyOrder {
             observer.onChanged(State.Idle)
+        }
+    }
+
+    @Test
+    fun `Should send onUserClick event when that user was select`() {
+        //Given
+        val user: User = mockk()
+        val userViewModel = UserViewModel("1", user)
+        val action = Action.SelectUser(userViewModel)
+
+        //When
+        searchMviIntent.dispatch(action)
+        testSchedulerRule.triggerActions()
+
+        //Then
+        verify(exactly = 1) {
+            searchEventListener.onUserClick()
+        }
+    }
+
+    @Test
+    fun `Should load users once only if the same email was dispatched twice`() {
+        //Given
+        val request = "request"
+        val action1 = Action.Search(request)
+        val action2 = Action.Search(request)
+        val users = arrayListOf<User>(mockk())
+        val userViewModel: UserViewModel = mockk()
+        every {
+            searchUserByEmailUseCase(any(), any())
+        } returns Observable.just(users)
+        every {
+            userViewModelConverter.convert(any())
+        } returns userViewModel
+
+        //When
+        searchMviIntent.dispatch(action1)
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
+        searchMviIntent.dispatch(action2)
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
+        testSchedulerRule.triggerActions()
+
+        //Then
+        verify(exactly = 1) {
+            searchUserByEmailUseCase(request, any())
+        }
+    }
+
+    @Test
+    fun `Should load users twice if different requests were dispatched twice`() {
+        //Given
+        val request1 = "request1"
+        val request2 = "request2"
+        val action1 = Action.Search(request1)
+        val action2 = Action.Search(request2)
+        val users = arrayListOf<User>(mockk())
+        val userViewModel: UserViewModel = mockk()
+        every {
+            searchUserByEmailUseCase(any(), any())
+        } returns Observable.just(users)
+        every {
+            userViewModelConverter.convert(any())
+        } returns userViewModel
+
+        //When
+        searchMviIntent.dispatch(action1)
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
+        searchMviIntent.dispatch(action2)
+        testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
+        testSchedulerRule.triggerActions()
+        //Then
+        verifyOrder {
+            searchUserByEmailUseCase(request1, any())
+            searchUserByEmailUseCase(request2, any())
         }
     }
 }

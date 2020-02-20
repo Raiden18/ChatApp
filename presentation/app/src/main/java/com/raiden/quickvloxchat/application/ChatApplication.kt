@@ -20,6 +20,7 @@ class ChatApplication : Application() {
         super.onCreate()
         initKoin()
         Timber.plant(Timber.DebugTree())
+        initLogger()
     }
 
     private fun initKoin() {
@@ -48,7 +49,7 @@ class ChatApplication : Application() {
     private fun initLogger() {
         MviLogger.enableLogging(object : MviLogger.Logger {
             override fun log(msg: String) {
-                Timber.tag("MVI").d(msg)
+                Timber.tag("HUI").d(msg)
             }
         })
 

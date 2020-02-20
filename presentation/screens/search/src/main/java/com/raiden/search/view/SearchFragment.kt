@@ -1,6 +1,7 @@
 package com.raiden.search.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.raiden.core.extensions.addTextChangedListener
 import com.raiden.core.extensions.showKeyboard
@@ -28,7 +29,7 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         search_edit_tet.showKeyboard()
         search_toolbar.setNavigationOnClickListener { mviIntent.dispatch(Action.GoBack) }
         search_edit_tet.addTextChangedListener { mviIntent.dispatch(Action.Search(it)) }
-        search_users.onUserClick = { } // TODO add dispatch
+        search_users.onUserClick = { mviIntent.dispatch(Action.SelectUser(it)) }
     }
 
     override fun renderState(state: State) {
@@ -53,9 +54,14 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
     }
 
     private fun renderContent(users: List<UserViewModel>) {
-        search_empty_message_container.animateHidingAndDo {
+        if (search_empty_message_container.alpha == 0f) {
             hideLoader()
             search_users.updateUsers(users)
+        } else {
+            search_empty_message_container.animateHidingAndDo {
+                hideLoader()
+                search_users.updateUsers(users)
+            }
         }
     }
 
@@ -70,13 +76,13 @@ class SearchFragment : CoreMviFragment<Action, State>(R.layout.fragment_search) 
         }
     }
 
-    override fun initAction(): Action? = Action.Idle
+    override fun initAction(): Action? = null
 
     private fun hideLoader() {
         search_loader.visibility = View.INVISIBLE
     }
 
-    private fun hideUsers(){
+    private fun hideUsers() {
         search_users.updateUsers(emptyList())
     }
 }

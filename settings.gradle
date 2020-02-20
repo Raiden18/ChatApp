@@ -1,4 +1,4 @@
-include ':domain', ':data', ':chat'
+include ':domain', ':data'
 
 //Presentation
 include ':presentation:app',
@@ -6,7 +6,8 @@ include ':presentation:app',
         //Screens
         ':presentation:screens:log_in',
         ':presentation:screens:chats',
-        ':presentation:screens:search'
+        ':presentation:screens:search',
+        ':presentation:screens:chat'
 
 
         //Widgets

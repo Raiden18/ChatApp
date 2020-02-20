@@ -20,12 +20,15 @@ class SearchMviIntent(
     private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State.Idle
+    private var savedEmail = ""
+
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.Idle -> State.Idle
             is Change.ShowLoader -> State.LoaderState
             is Change.EmptySearchResult -> State.EmptyState
             is Change.ShowContent -> State.ContentState(change.users)
+            is Change.DoNothing -> state
         }
     }
 
@@ -45,21 +48,28 @@ class SearchMviIntent(
             .map { it.email }
             .debounce(350, TimeUnit.MILLISECONDS, schedulerProvider.io())
             .switchMap<Change> { email ->
-                if (email.isEmpty())
-                    Observable.just(Change.Idle)
-                else
-                    searchUserByEmailUseCase.invoke(email, 0) // Implement pager
+                when {
+                    email == savedEmail -> Observable.just(Change.DoNothing)
+                    email.isEmpty() -> Observable.just(Change.Idle)
+                    else -> searchUserByEmailUseCase.invoke(email, 0) // Implement pager
                         .flatMap { Observable.fromIterable(it) }
                         .map { userViewModelConverter.convert(it) }
                         .toList()
                         .toObservable()
+                        .doOnNext { savedEmail = email }
                         .filter { it.isNotEmpty() }
                         .map<Change> { Change.ShowContent(it) }
                         .defaultIfEmpty(Change.EmptySearchResult)
                         .startWith(Change.ShowLoader)
+                }
             }
 
-        disposables += Observable.merge(goBack, searchUsers, idle)
+        val onUserSelect = actions.ofType<Action.SelectUser>()
+            .map { it.user }
+            .doOnNext { searchEventListener.onUserClick() }
+            .map { Change.DoNothing }
+
+        disposables += Observable.merge(goBack, searchUsers, idle, onUserSelect)
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)

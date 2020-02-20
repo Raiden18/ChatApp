@@ -15,7 +15,7 @@ abstract class CoreMviIntent<A : CoreAction, S : CoreState>: ViewModel(){
 
     val observableState: LiveData<S> = MediatorLiveData<S>().apply {
         addSource(state) { data ->
-            MviLogger.log("MVI: Received state: $data")
+            MviLogger.log("HUI: Received state: $data")
             setValue(data)
         }
     }
@@ -23,7 +23,7 @@ abstract class CoreMviIntent<A : CoreAction, S : CoreState>: ViewModel(){
     protected abstract fun bindActions()
 
     fun dispatch(action: A) {
-        MviLogger.log("MVI: Received action: $action")
+        MviLogger.log("HUI: Received action: $action")
         actions.onNext(action)
     }
 
