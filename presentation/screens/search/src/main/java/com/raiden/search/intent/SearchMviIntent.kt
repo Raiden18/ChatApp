@@ -20,7 +20,6 @@ class SearchMviIntent(
     private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State.Idle
-    private var savedEmail = ""
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
