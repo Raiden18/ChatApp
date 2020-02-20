@@ -46,17 +46,17 @@ class SearchMviIntent(
 
         val searchUsers = actions.ofType<Action.Search>()
             .map { it.email }
+            .cacheWithInitialCapacity(1)
+            .distinctUntilChanged()
             .debounce(350, TimeUnit.MILLISECONDS, schedulerProvider.io())
             .switchMap<Change> { email ->
                 when {
-                    email == savedEmail -> Observable.just(Change.DoNothing)
                     email.isEmpty() -> Observable.just(Change.Idle)
-                    else -> searchUserByEmailUseCase.invoke(email, 0) // Implement pager
+                    else -> searchUserByEmailUseCase.invoke(email, 0) // TODO: Implement pager
                         .flatMap { Observable.fromIterable(it) }
                         .map { userViewModelConverter.convert(it) }
                         .toList()
                         .toObservable()
-                        .doOnNext { savedEmail = email }
                         .filter { it.isNotEmpty() }
                         .map<Change> { Change.ShowContent(it) }
                         .defaultIfEmpty(Change.EmptySearchResult)
