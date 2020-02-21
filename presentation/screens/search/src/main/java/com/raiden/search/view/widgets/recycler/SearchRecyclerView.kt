@@ -30,6 +30,11 @@ internal class SearchRecyclerView(
         searchAdapter.items = users
     }
 
+    fun hide() {
+        initAdapter()
+        searchAdapter.items = emptyList<UserViewModel>()
+    }
+
     private fun initAdapter() {
         if (adapter == null) {
             adapter = searchAdapter
