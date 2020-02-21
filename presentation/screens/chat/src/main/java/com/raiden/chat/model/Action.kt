@@ -2,5 +2,6 @@ package com.raiden.chat.model
 
 import com.raiden.core.mvi.CoreAction
 
-class Action: CoreAction {
+sealed class Action: CoreAction {
+    object LoadDialogHistory: Action()
 }

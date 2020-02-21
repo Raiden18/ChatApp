@@ -26,5 +26,5 @@ class ChatFragment : CoreMviFragment<Action, State>(R.layout.fragment_chat) {
 
     }
 
-    override fun initAction(): Action? = null
+    override fun initAction(): Action? = Action.LoadDialogHistory
 }

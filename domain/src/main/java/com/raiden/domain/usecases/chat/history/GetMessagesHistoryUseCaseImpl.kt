@@ -13,7 +13,7 @@ class GetMessagesHistoryUseCaseImpl : GetMessagesHistoryUseCase {
             createSenderMessage("Hello"),
             createReceiverMessage("Hello :)"),
             createSenderMessage("What is you up to?"),
-            createSenderMessage("Just messing around with chat app")
+            createReceiverMessage("Just messing around with chat app")
         )
         return Observable.just(messages)
     }
