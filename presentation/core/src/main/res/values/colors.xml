@@ -5,5 +5,7 @@
     <color name="first_primary_dark">#7f0000</color>
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
-    <color name="gray">@android:color/darker_gray</color>
+    <color name="darker_gray">@android:color/darker_gray</color>
+    <color name="light_gray">#80bababf</color>
+
 </resources>

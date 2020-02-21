@@ -8,4 +8,5 @@
     <string name="search">Search</string>
     <string name="email_of_user">User\'s email</string>
     <string name="users_were_not_found">Users weren\'t found :(</string>
+    <string name="message">Message</string>
 </resources>
