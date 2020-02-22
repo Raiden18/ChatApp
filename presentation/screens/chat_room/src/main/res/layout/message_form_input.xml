@@ -30,6 +30,7 @@
         app:backgroundTint="#4d5276ff" />
 
     <ImageView
+        android:id="@+id/chat_send_message"
         android:layout_width="47dp"
         android:layout_height="47dp"
         android:layout_gravity="bottom"

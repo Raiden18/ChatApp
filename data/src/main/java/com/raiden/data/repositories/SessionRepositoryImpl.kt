@@ -1,7 +1,9 @@
 package com.raiden.data.repositories
 
+import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.raiden.data.frameworks.quickblox.adapters.users.QBUsersRxAdapter
+import com.quickblox.users.model.QBUser
+import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapter
 import com.raiden.domain.models.User
 import com.raiden.domain.repositories.SessionRepository
 import io.reactivex.Observable
@@ -14,6 +16,7 @@ class SessionRepositoryImpl(
 
     override fun getUser(): Observable<User> {
         return selectedUserForChat
+            .doOnNext { Log.i("1488-GET_", it.id.toString()) }
     }
 
     override fun saveUser(user: User): Observable<Unit> {
@@ -22,9 +25,12 @@ class SessionRepositoryImpl(
     }
 
     override fun logIn(email: String, password: String): Observable<User> {
-        return qbUsersRxAdapter.logIn(email, password)
-            .map { User(it.email, it.fullName) }
+        val qbUser = QBUser(email, password)
+        return qbUsersRxAdapter.createSession(qbUser)
+            .flatMapObservable { qbUsersRxAdapter.logIn(it).toObservable() }
+            .flatMap { qbUsersRxAdapter.getUserById(it.id).toObservable() }
+            .map { User(it.id, it.email, it.fullName) }
             .subscribeOn(AndroidSchedulers.mainThread())
-            .toObservable()
+
     }
 }

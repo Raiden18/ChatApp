@@ -2,6 +2,8 @@ package com.raiden.quickvloxchat.di
 
 import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
 import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistoryImpl
+import com.raiden.domain.usecases.chatroom.messages.send.SendMessage
+import com.raiden.domain.usecases.chatroom.messages.send.SendMessageImpl
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChat
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChatImpl
 import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChat
@@ -21,4 +23,5 @@ val DOMAIN_DEPENDENCIES = module(createdAtStart = true) {
     single<GetMessagesHistory> { GetMessagesHistoryImpl() }
     single<SelectUserForChat> { SelectUserForChatImpl(get()) }
     single<GetSelectedUserForChat> { GetSelectedUserForChatImpl(get()) }
+    single<SendMessage> { SendMessageImpl(get(), get()) }
 }

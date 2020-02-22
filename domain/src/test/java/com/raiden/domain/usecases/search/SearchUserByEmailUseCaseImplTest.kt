@@ -22,11 +22,11 @@ class SearchUserByEmailUseCaseImplTest {
     @Test
     fun `Should filter users by email`() {
         //Given
-        val users = arrayListOf(
-            User("emaiL1@gmail.com", ""),
-            User("emaIl2@gmail.com ", ""),
-            User("email3@gmail.com", ""),
-            User(" 123234@gmail.com", "")
+        val users = arrayListOf<User>(
+            User(0,"emaiL1@gmail.com", ""),
+            User(1, "emaIl2@gmail.com ", ""),
+            User(2, "email3@gmail.com", ""),
+            User(3," 123234@gmail.com", "")
         )
         val emailRequest = " email"
         val expectedUserSize = 3
@@ -45,10 +45,10 @@ class SearchUserByEmailUseCaseImplTest {
     fun `Should return empty if request is empty`() {
         //Given
         val users = arrayListOf<User>(
-            User("emaiL1@gmail.com", ""),
-            User("emaIl2@gmail.com ", ""),
-            User("email3@gmail.com", ""),
-            User(" 123234@gmail.com", "")
+            User(0,"emaiL1@gmail.com", ""),
+            User(1, "emaIl2@gmail.com ", ""),
+            User(2, "email3@gmail.com", ""),
+            User(3," 123234@gmail.com", "")
         )
         val emailRequest = ""
         val expectedUserSize = 0

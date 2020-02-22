@@ -7,5 +7,5 @@ import io.reactivex.Observable
 interface ChatRoomRepository {
     fun selectForChat(user: User): Observable<Nothing>
     fun getSelectedUserForChat(): Observable<User>
-    fun sendMessage(message: Message): Observable<Nothing>
+    fun sendMessage(message: Message): Observable<Unit>
 }

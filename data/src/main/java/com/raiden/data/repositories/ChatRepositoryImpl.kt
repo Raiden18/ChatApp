@@ -1,6 +1,6 @@
 package com.raiden.data.repositories
 
-import com.raiden.data.frameworks.quickblox.adapters.users.QBUsersRxAdapter
+import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapter
 import com.raiden.domain.models.User
 import com.raiden.domain.repositories.ChatRepository
 import io.reactivex.Observable
@@ -15,7 +15,7 @@ class ChatRepositoryImpl(
         return qbUsersRxAdapter.getUsers(page, perPage)
             .toObservable()
             .switchMap { users -> Observable.fromIterable(users) }
-            .map { User(it.email, it.fullName) }
+            .map { User(it.id, it.email, it.fullName) }
             .toList()
             .map { ArrayList(it) }
             .subscribeOn(AndroidSchedulers.mainThread())

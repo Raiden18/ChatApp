@@ -1,7 +1,6 @@
 package com.raiden.data.frameworks.quickblox
 
 import android.app.Application
-import android.util.Log
 import com.quickblox.auth.session.QBSettings
 import com.quickblox.chat.QBChatService
 
@@ -37,6 +36,5 @@ class QuickbloxInitter(private val application: Application) {
         QBChatService.setConfigurationBuilder(builder)
         QBChatService.setDebugEnabled(true)
         QBChatService.setDefaultPacketReplyTimeout(PACKAGE_REPLY_TIMEOUT)
-
     }
 }

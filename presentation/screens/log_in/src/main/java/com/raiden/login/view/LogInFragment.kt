@@ -8,6 +8,7 @@ import com.raiden.core.extensions.setOnclickListener
 import com.raiden.core.mvi.CoreMviFragment
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.widgets.dialogs.ShowErrorDialog
+import com.raiden.login.BuildConfig
 import com.raiden.login.R
 import com.raiden.login.intent.MviIntent
 import com.raiden.login.models.Action
@@ -22,7 +23,7 @@ class LogInFragment : CoreMviFragment<Action, State>(R.layout.fragment_login) {
     override val mviIntent: CoreMviIntent<Action, State> by currentScope.viewModel<MviIntent>(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState)
         log_in_field_edit_text.addTextChangedListener { email ->
             mviIntent.dispatch(Action.InputLogIn(email))
         }
@@ -31,6 +32,11 @@ class LogInFragment : CoreMviFragment<Action, State>(R.layout.fragment_login) {
         }
         log_in_button.setOnclickListener {
             mviIntent.dispatch(Action.LogIn)
+        }
+        if (BuildConfig.DEBUG) {
+            log_in_field_edit_text.setText("qwe@qwe.com")
+            password_field_edit_text.setText("12345678")
+            log_in_button.isEnabled = true
         }
     }
 

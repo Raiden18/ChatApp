@@ -6,8 +6,8 @@ import io.reactivex.Observable
 class GetMessagesHistoryImpl :
     GetMessagesHistory {
 
-    private val senderId = "123123"
-    private val receiverId = "3213123"
+    private val senderId = 123123
+    private val receiverId = 3213123
 
     override fun invoke(): Observable<List<Message>> {
         val messages = listOf(

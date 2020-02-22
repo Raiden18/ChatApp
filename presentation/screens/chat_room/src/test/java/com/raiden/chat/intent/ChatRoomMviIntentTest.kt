@@ -6,11 +6,9 @@ import com.raiden.chat.model.State
 import com.raiden.domain.models.Message
 import com.raiden.domain.models.User
 import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
+import com.raiden.domain.usecases.chatroom.messages.send.SendMessage
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChat
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verifyOrder
+import io.mockk.*
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import org.junit.Before
@@ -21,6 +19,7 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
     private lateinit var chatMviIntent: ChatRoomMviIntent
     private lateinit var getMessagesHistoryUseCase: GetMessagesHistory
     private lateinit var getUserForChatUseCase: GetSelectedUserForChat
+    private lateinit var sendMessage: SendMessage
     private lateinit var consumer: Consumer<State>
 
     @Before
@@ -28,7 +27,9 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         getMessagesHistoryUseCase = spyk()
         consumer = spyk()
         getUserForChatUseCase = spyk()
-        chatMviIntent = ChatRoomMviIntent(getMessagesHistoryUseCase, getUserForChatUseCase)
+        sendMessage = spyk()
+        chatMviIntent =
+            ChatRoomMviIntent(getMessagesHistoryUseCase, getUserForChatUseCase, sendMessage)
         chatMviIntent.observableState.subscribe(consumer)
     }
 
@@ -36,8 +37,7 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
     fun `Should load chat room data  when that action was sent`() {
         //Given
         val messages = listOf<Message>(mockk())
-        val userName = "Paul Karpukhin"
-        val user = User("", userName)
+        val user: User = mockk(relaxed = true)
         every {
             getMessagesHistoryUseCase()
         } returns Observable.just(messages)
@@ -56,5 +56,22 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         }
     }
 
+    @Test
+    fun `Should send message`() {
+        //Given
+        val message = "Message"
+        val action = Action.SendMessage(message)
+
+        //When
+        chatMviIntent.dispatch(action)
+        testSchedulerRule.triggerActions()
+
+        //Then
+        verify {
+            sendMessage(message)
+            consumer.accept(State.Idle)
+        }
+
+    }
 
 }

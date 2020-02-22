@@ -1,8 +1,8 @@
 package com.raiden.quickvloxchat.di
 
 import com.raiden.data.frameworks.quickblox.QuickbloxInitter
-import com.raiden.data.frameworks.quickblox.adapters.users.QBUsersRxAdapter
-import com.raiden.data.frameworks.quickblox.adapters.users.QBUsersRxAdapterImpl
+import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapter
+import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapterImpl
 import com.raiden.data.repositories.ChatRepositoryImpl
 import com.raiden.data.repositories.ChatRoomRepositoryImpl
 import com.raiden.data.repositories.SessionRepositoryImpl
@@ -18,6 +18,6 @@ val DATA_DEPENDENCIES = module(createdAtStart = true) {
 
     //Repositories
     single<ChatRepository> { ChatRepositoryImpl(get()) }
-    single<ChatRoomRepository> { ChatRoomRepositoryImpl() }
+    single<ChatRoomRepository> { ChatRoomRepositoryImpl(get()) }
     single<SessionRepository> { SessionRepositoryImpl(get()) }
 }
