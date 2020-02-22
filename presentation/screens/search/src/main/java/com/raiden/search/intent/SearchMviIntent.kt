@@ -3,7 +3,7 @@ package com.raiden.search.intent
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.core.utils.rx.schedule.SchedulerProvider
-import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChatUseCase
+import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChat
 import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.Change
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 class SearchMviIntent(
     private val searchEventListener: SearchEventListener,
     private val searchUserByEmailUseCase: SearchUserByEmailUseCase,
-    private val selectUserForChatUseCase: SelectUserForChatUseCase,
+    private val selectUserForChatUseCase: SelectUserForChat,
     private val schedulerProvider: SchedulerProvider,
     private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {

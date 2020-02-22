@@ -5,7 +5,7 @@ import com.raiden.chat.model.Action
 import com.raiden.chat.model.State
 import com.raiden.domain.models.Message
 import com.raiden.domain.models.User
-import com.raiden.domain.usecases.chatroom.messages.GetMessagesHistoryUseCase
+import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChat
 import io.mockk.every
 import io.mockk.mockk
@@ -19,7 +19,7 @@ import org.junit.Test
 class ChatRoomMviIntentTest : BaseMviIntentTest() {
 
     private lateinit var chatMviIntent: ChatRoomMviIntent
-    private lateinit var getMessagesHistoryUseCase: GetMessagesHistoryUseCase
+    private lateinit var getMessagesHistoryUseCase: GetMessagesHistory
     private lateinit var getUserForChatUseCase: GetSelectedUserForChat
     private lateinit var consumer: Consumer<State>
 

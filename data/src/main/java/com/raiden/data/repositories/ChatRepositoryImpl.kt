@@ -11,12 +11,6 @@ class ChatRepositoryImpl(
     private val qbUsersRxAdapter: QBUsersRxAdapter
 ) : ChatRepository {
 
-    override fun logIn(login: String, password: String): Single<User> {
-        return qbUsersRxAdapter.logIn(login, password)
-            .map { User(it.email, it.fullName) }
-            .subscribeOn(AndroidSchedulers.mainThread())
-    }
-
     override fun getUsers(page: Int, perPage: Int): Single<ArrayList<User>> {
         return qbUsersRxAdapter.getUsers(page, perPage)
             .toObservable()

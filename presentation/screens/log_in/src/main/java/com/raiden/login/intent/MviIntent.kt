@@ -81,7 +81,6 @@ class MviIntent(
             .debounce(500, TimeUnit.MILLISECONDS)
             .switchMap {
                 logInUseCase.invoke(email, password)
-                    .toObservable()
                     .map<Change> { Change.HideLoading }
                     .doOnNext { logInEventListener.onLogInClick() }
                     .onErrorReturn { Change.LogInError(it) }

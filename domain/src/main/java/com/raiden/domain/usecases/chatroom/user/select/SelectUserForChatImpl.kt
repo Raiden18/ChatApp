@@ -4,9 +4,9 @@ import com.raiden.domain.models.User
 import com.raiden.domain.repositories.ChatRoomRepository
 import io.reactivex.Observable
 
-class SelectUserForChatUseCaseImpl(
+class SelectUserForChatImpl(
     private val chatRomRepository: ChatRoomRepository
-) : SelectUserForChatUseCase {
+) : SelectUserForChat {
 
     override fun invoke(user: User): Observable<Nothing> {
         return chatRomRepository.selectForChat(user)

@@ -1,9 +1,10 @@
-package com.raiden.domain.usecases.chatroom.messages
+package com.raiden.domain.usecases.chatroom.messages.get
 
 import com.raiden.domain.models.Message
 import io.reactivex.Observable
 
-class GetMessagesHistoryUseCaseImpl : GetMessagesHistoryUseCase {
+class GetMessagesHistoryImpl :
+    GetMessagesHistory {
 
     private val senderId = "123123"
     private val receiverId = "3213123"

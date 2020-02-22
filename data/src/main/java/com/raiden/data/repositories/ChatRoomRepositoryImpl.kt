@@ -1,6 +1,7 @@
 package com.raiden.data.repositories
 
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.raiden.domain.models.Message
 import com.raiden.domain.models.User
 import com.raiden.domain.repositories.ChatRoomRepository
 import io.reactivex.Observable
@@ -15,5 +16,9 @@ class ChatRoomRepositoryImpl : ChatRoomRepository {
 
     override fun getSelectedUserForChat(): Observable<User> {
         return selectedUserForChat
+    }
+
+    override fun sendMessage(message: Message): Observable<Nothing> {
+        return Observable.empty()
     }
 }

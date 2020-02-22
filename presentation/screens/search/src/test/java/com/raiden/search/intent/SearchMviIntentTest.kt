@@ -3,7 +3,7 @@ package com.raiden.search.intent
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
 import com.raiden.core.utils.rx.schedule.SchedulerProvider
 import com.raiden.domain.models.User
-import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChatUseCase
+import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChat
 import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
@@ -25,7 +25,7 @@ class SearchMviIntentTest : BaseMviIntentTest() {
     private lateinit var schedulerProvider: SchedulerProvider
     private lateinit var testScheduler: TestScheduler
     private lateinit var userViewModelConverter: UserViewModelConverter
-    private lateinit var selectUserForChatUseCase: SelectUserForChatUseCase
+    private lateinit var selectUserForChatUseCase: SelectUserForChat
 
     @Before
     fun setUp() {

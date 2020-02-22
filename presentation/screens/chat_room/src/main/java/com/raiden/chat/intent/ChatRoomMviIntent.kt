@@ -5,14 +5,14 @@ import com.raiden.chat.model.Change
 import com.raiden.chat.model.State
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
-import com.raiden.domain.usecases.chatroom.messages.GetMessagesHistoryUseCase
+import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChat
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 
 class ChatRoomMviIntent(
-    private val getMessagesHistoryUseCase: GetMessagesHistoryUseCase,
+    private val getMessagesHistoryUseCase: GetMessagesHistory,
     private val getSelectedUserForChat: GetSelectedUserForChat
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State.Idle
