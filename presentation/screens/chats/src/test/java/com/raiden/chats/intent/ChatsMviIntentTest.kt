@@ -1,13 +1,13 @@
 package com.raiden.chats.intent
 
-import androidx.lifecycle.Observer
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
 import com.raiden.chats.models.Action
 import com.raiden.chats.models.State
 import com.raiden.domain.models.Chat
-import com.raiden.domain.usecases.chat.get.GetAllChatsUseCase
+import com.raiden.domain.usecases.chats.get.GetAllChatsUseCase
 import io.mockk.*
 import io.reactivex.Single
+import io.reactivex.functions.Consumer
 import org.junit.Before
 import org.junit.Test
 
@@ -15,15 +15,16 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
 
     private lateinit var chatsMviIntent: ChatsMviIntent
     private lateinit var getAllChatsUseCase: GetAllChatsUseCase
-    private lateinit var observer: Observer<State>
+    private lateinit var consumer: Consumer<State>
     private lateinit var chatsEventListener: ChatsEventListener
+
     @Before
     fun setUp() {
         getAllChatsUseCase = spyk()
-        observer = spyk()
+        consumer = spyk()
         chatsEventListener = spyk()
         chatsMviIntent = ChatsMviIntent(getAllChatsUseCase, chatsEventListener)
-        chatsMviIntent.observableState.observeForever(observer)
+        chatsMviIntent.observableState.subscribe(consumer)
     }
 
     @Test
@@ -50,8 +51,8 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(expectedLodingState)
-            observer.onChanged(expectedState)
+            consumer.accept(expectedLodingState)
+            consumer.accept(expectedState)
         }
     }
 
@@ -69,7 +70,7 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(expectedState)
+            consumer.accept(expectedState)
             chatsEventListener.onSearchClick()
         }
     }
@@ -88,7 +89,7 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(expectedState)
+            consumer.accept(expectedState)
             chatsEventListener.goBack()
         }
     }

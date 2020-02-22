@@ -1,7 +1,7 @@
 package com.raiden.quickvloxchat.application
 
 import android.app.Application
-import com.raiden.chat.di.CHAT_MODULE
+import com.raiden.chat.di.CHAT_ROOM_MODULE
 import com.raiden.chats.di.CHATS_MODULE
 import com.raiden.core.mvi.MviLogger
 import com.raiden.login.di.LOG_IN_MODULE
@@ -37,7 +37,7 @@ class ChatApplication : Application() {
                     LOG_IN_MODULE,
                     CHATS_MODULE,
                     SEARCH_MODULE,
-                    CHAT_MODULE
+                    CHAT_ROOM_MODULE
                 )
             )
         }

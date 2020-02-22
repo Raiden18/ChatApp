@@ -95,7 +95,7 @@ class MviIntent(
             logIn
         ).scan(initialState, reducer)
             .distinctUntilChanged()
-            .subscribe(state::postValue, Timber::e)
+            .subscribe(state::accept, Timber::e)
     }
 
     private fun validateField(validationStrategy: ValidationStrategy): FieldState {

@@ -1,24 +1,18 @@
 package com.raiden.core.mvi
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jakewharton.rxrelay2.BehaviorRelay
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-abstract class CoreMviIntent<A : CoreAction, S : CoreState>: ViewModel(){
+abstract class CoreMviIntent<A : CoreAction, S : CoreState> : ViewModel() {
     protected val actions: PublishSubject<A> = PublishSubject.create<A>()
     protected val disposables: CompositeDisposable = CompositeDisposable()
     protected abstract val initialState: S
-    protected val state = MutableLiveData<S>()
+    protected val state = BehaviorRelay.create<S>()
 
-    val observableState: LiveData<S> = MediatorLiveData<S>().apply {
-        addSource(state) { data ->
-            MviLogger.log("HUI: Received state: $data")
-            setValue(data)
-        }
-    }
+    val observableState: Observable<S> = state
 
     protected abstract fun bindActions()
 

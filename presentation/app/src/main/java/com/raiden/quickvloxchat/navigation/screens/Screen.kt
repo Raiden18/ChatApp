@@ -1,7 +1,7 @@
 package com.raiden.quickvloxchat.navigation.screens
 
 import androidx.fragment.app.Fragment
-import com.raiden.chat.view.ChatFragment
+import com.raiden.chat.view.ChatRoomFragment
 import com.raiden.chats.view.ChatsFragment
 import com.raiden.login.view.LogInFragment
 import com.raiden.search.view.SearchFragment
@@ -13,5 +13,5 @@ sealed class Screen(private val fragment: Fragment) : SupportAppScreen() {
     class LogIn : Screen(LogInFragment())
     class Chats : Screen(ChatsFragment())
     class Search : Screen(SearchFragment())
-    class Chat : Screen(ChatFragment())
+    class ChatRoom(userName: String) : Screen(ChatRoomFragment.newInstance(userName))
 }

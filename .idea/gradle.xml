@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/presentation/app" />
             <option value="$PROJECT_DIR$/presentation/core" />
             <option value="$PROJECT_DIR$/presentation/screens" />
-            <option value="$PROJECT_DIR$/presentation/screens/chat" />
+            <option value="$PROJECT_DIR$/presentation/screens/chat_room" />
             <option value="$PROJECT_DIR$/presentation/screens/chats" />
             <option value="$PROJECT_DIR$/presentation/screens/log_in" />
             <option value="$PROJECT_DIR$/presentation/screens/search" />

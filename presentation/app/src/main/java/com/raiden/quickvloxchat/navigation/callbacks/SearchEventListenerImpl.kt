@@ -12,8 +12,8 @@ class SearchEventListenerImpl(
         router.exit()
     }
 
-    override fun onUserClick() {
-        val chatClick = Screen.Chat()
+    override fun onUserClick(userName: String) {
+        val chatClick = Screen.ChatRoom(userName)
         router.navigateTo(chatClick)
     }
 }

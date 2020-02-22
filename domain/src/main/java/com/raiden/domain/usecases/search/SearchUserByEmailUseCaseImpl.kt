@@ -1,11 +1,11 @@
 package com.raiden.domain.usecases.search
 
 import com.raiden.domain.models.User
-import com.raiden.domain.repositories.ChatGateway
+import com.raiden.domain.repositories.ChatRepository
 import io.reactivex.Observable
 
 class SearchUserByEmailUseCaseImpl(
-    private val usersGateway: ChatGateway
+    private val usersGateway: ChatRepository
 ) : SearchUserByEmailUseCase {
 
     companion object {

@@ -1,15 +1,16 @@
 package com.raiden.search.intent
 
-import androidx.lifecycle.Observer
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
 import com.raiden.core.utils.rx.schedule.SchedulerProvider
 import com.raiden.domain.models.User
+import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChatUseCase
 import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.State
 import com.raiden.search.models.UserViewModel
 import io.mockk.*
 import io.reactivex.Observable
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
@@ -19,19 +20,21 @@ class SearchMviIntentTest : BaseMviIntentTest() {
 
     private lateinit var searchEventListener: SearchEventListener
     private lateinit var searchMviIntent: SearchMviIntent
-    private lateinit var observer: Observer<State>
+    private lateinit var consumer: Consumer<State>
     private lateinit var searchUserByEmailUseCase: SearchUserByEmailUseCase
     private lateinit var schedulerProvider: SchedulerProvider
     private lateinit var testScheduler: TestScheduler
     private lateinit var userViewModelConverter: UserViewModelConverter
+    private lateinit var selectUserForChatUseCase: SelectUserForChatUseCase
 
     @Before
     fun setUp() {
         searchEventListener = spyk()
-        observer = spyk()
+        consumer = spyk()
         searchUserByEmailUseCase = spyk()
         schedulerProvider = spyk()
         userViewModelConverter = spyk()
+        selectUserForChatUseCase = spyk()
         testScheduler = TestScheduler()
         every {
             schedulerProvider.io()
@@ -40,10 +43,11 @@ class SearchMviIntentTest : BaseMviIntentTest() {
             SearchMviIntent(
                 searchEventListener,
                 searchUserByEmailUseCase,
+                selectUserForChatUseCase,
                 schedulerProvider,
                 userViewModelConverter
             )
-        searchMviIntent.observableState.observeForever(observer)
+        searchMviIntent.observableState.subscribe(consumer)
     }
 
     @Test
@@ -57,7 +61,7 @@ class SearchMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(expectedState)
+            consumer.accept(expectedState)
             searchEventListener.onBackClick()
         }
     }
@@ -79,8 +83,8 @@ class SearchMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(loaderState)
-            observer.onChanged(expectedEmptyState)
+            consumer.accept(loaderState)
+            consumer.accept(expectedEmptyState)
         }
     }
 
@@ -106,8 +110,8 @@ class SearchMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(loaderState)
-            observer.onChanged(contentState)
+            consumer.accept(loaderState)
+            consumer.accept(contentState)
         }
     }
 
@@ -132,24 +136,28 @@ class SearchMviIntentTest : BaseMviIntentTest() {
 
         //Then
         verifyOrder {
-            observer.onChanged(State.Idle)
+            consumer.accept(State.Idle)
         }
     }
 
     @Test
-    fun `Should send onUserClick event when that user was select`() {
+    fun `Should selectUser for chat and then send onUserClick event when that user was select`() {
         //Given
-        val user: User = mockk()
+        val user: User = mockk(relaxed = true)
         val userViewModel = UserViewModel("1", user)
         val action = Action.SelectUser(userViewModel)
+        every {
+            selectUserForChatUseCase.invoke(any())
+        } returns Observable.empty()
 
         //When
         searchMviIntent.dispatch(action)
         testSchedulerRule.triggerActions()
 
         //Then
-        verify(exactly = 1) {
-            searchEventListener.onUserClick()
+        verify {
+            selectUserForChatUseCase.invoke(user)
+            searchEventListener.onUserClick(user.fullName)
         }
     }
 

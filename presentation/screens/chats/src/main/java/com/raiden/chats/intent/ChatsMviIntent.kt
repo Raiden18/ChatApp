@@ -5,7 +5,7 @@ import com.raiden.chats.models.Change
 import com.raiden.chats.models.State
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
-import com.raiden.domain.usecases.chat.get.GetAllChatsUseCase
+import com.raiden.domain.usecases.chats.get.GetAllChatsUseCase
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.plusAssign
@@ -65,6 +65,6 @@ class ChatsMviIntent(
         disposables += Observable.merge(chats, onSearchClick, goBackClick)
             .scan(initialState, reducer)
             .distinctUntilChanged()
-            .subscribe(state::setValue, Timber::e)
+            .subscribe(state::accept, Timber::e)
     }
 }

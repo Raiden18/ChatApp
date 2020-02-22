@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import com.trello.rxlifecycle3.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.android.schedulers.AndroidSchedulers
+import timber.log.Timber
 
 abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
     @LayoutRes private val layoutID: Int
@@ -35,9 +37,10 @@ abstract class CoreMviFragment<A : CoreAction, S : CoreState>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mviIntent.observableState.observe(viewLifecycleOwner, Observer {
-            renderState(it)
-        })
+        mviIntent.observableState
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindToLifecycle(viewLifecycleOwner)
+            .subscribe(::renderState, Timber::e)
 
         val action = initAction()
         if (action != null) {

@@ -1,7 +1,7 @@
 package com.raiden.domain.usecases.search
 
 import com.raiden.domain.models.User
-import com.raiden.domain.repositories.ChatGateway
+import com.raiden.domain.repositories.ChatRepository
 import io.mockk.every
 import io.mockk.spyk
 import io.reactivex.Single
@@ -11,7 +11,7 @@ import org.junit.Test
 
 class SearchUserByEmailUseCaseImplTest {
     private lateinit var searchUserByEmailUseCase: SearchUserByEmailUseCase
-    private lateinit var chatGateway: ChatGateway
+    private lateinit var chatGateway: ChatRepository
 
     @Before
     fun setUp() {

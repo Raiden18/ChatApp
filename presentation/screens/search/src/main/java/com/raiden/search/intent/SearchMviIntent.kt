@@ -3,6 +3,7 @@ package com.raiden.search.intent
 import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.core.utils.rx.schedule.SchedulerProvider
+import com.raiden.domain.usecases.chatroom.user.select.SelectUserForChatUseCase
 import com.raiden.domain.usecases.search.SearchUserByEmailUseCase
 import com.raiden.search.models.Action
 import com.raiden.search.models.Change
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit
 class SearchMviIntent(
     private val searchEventListener: SearchEventListener,
     private val searchUserByEmailUseCase: SearchUserByEmailUseCase,
+    private val selectUserForChatUseCase: SelectUserForChatUseCase,
     private val schedulerProvider: SchedulerProvider,
     private val userViewModelConverter: UserViewModelConverter
 ) : CoreMviIntent<Action, State>() {
@@ -64,13 +66,17 @@ class SearchMviIntent(
             }
 
         val onUserSelect = actions.ofType<Action.SelectUser>()
+            .map { it.userViewModel }
             .map { it.user }
-            .doOnNext { searchEventListener.onUserClick() }
+            .flatMap { user ->
+                selectUserForChatUseCase(user)
+                    .doOnComplete { searchEventListener.onUserClick(user.fullName) }
+            }
             .map { Change.DoNothing }
 
         disposables += Observable.merge(goBack, searchUsers, idle, onUserSelect)
             .scan(initialState, reducer)
             .distinctUntilChanged()
-            .subscribe(state::postValue, Timber::e)
+            .subscribe(state::accept, Timber::e)
     }
 }

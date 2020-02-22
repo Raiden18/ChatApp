@@ -6,5 +6,5 @@ sealed class Action : CoreAction {
     object Idle : Action()
     object GoBack : Action()
     data class Search(val email: String) : Action()
-    data class SelectUser(val user: UserViewModel) : Action()
+    data class SelectUser(val userViewModel: UserViewModel) : Action()
 }

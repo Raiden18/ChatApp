@@ -7,7 +7,7 @@ include ':presentation:app',
         ':presentation:screens:log_in',
         ':presentation:screens:chats',
         ':presentation:screens:search',
-        ':presentation:screens:chat'
+        ':presentation:screens:chat_room'
 
 
         //Widgets
