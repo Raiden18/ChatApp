@@ -7,6 +7,7 @@ import com.quickblox.chat.QBChatService
 import com.quickblox.chat.QBRestChatService
 import com.quickblox.chat.model.QBChatDialog
 import com.quickblox.chat.model.QBChatMessage
+import com.quickblox.chat.request.QBMessageGetBuilder
 import com.quickblox.chat.utils.DialogUtils
 import com.quickblox.core.QBEntityCallback
 import com.quickblox.core.exception.QBResponseException
@@ -91,6 +92,16 @@ class QBUsersRxAdapterImpl : QBUsersRxAdapter {
         return Single.create { emitter ->
             val quickBoxRxAdapter = SimpleSingleEntityCallback(emitter)
             QBUsers.getUser(id).performAsync(quickBoxRxAdapter)
+        }
+    }
+
+    override fun getAllMessages(dialogId: String): Single<ArrayList<QBChatMessage>> {
+        return Single.create { emitter->
+            val chatDialog = QBChatDialog(dialogId)
+            val messageGetBuilder = QBMessageGetBuilder()
+            messageGetBuilder.limit = 500
+            val quickBoxRxAdapter = SimpleSingleEntityCallback(emitter)
+            QBRestChatService.getDialogMessages(chatDialog, messageGetBuilder).performAsync(quickBoxRxAdapter)
         }
     }
 }

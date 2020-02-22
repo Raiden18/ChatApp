@@ -16,7 +16,8 @@ import timber.log.Timber
 class ChatRoomMviIntent(
     private val getMessagesHistoryUseCase: GetMessagesHistory,
     private val getSelectedUserForChat: GetSelectedUserForChat,
-    private val sendMessage: SendMessage
+    private val sendMessage: SendMessage,
+    private val messageViewModelMapper: MessageViewModelMapper
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State.Idle
 
@@ -37,6 +38,11 @@ class ChatRoomMviIntent(
             .flatMap { getSelectedUserForChat() }
             .flatMap { selectedUser ->
                 getMessagesHistoryUseCase()
+                    .flatMap { Observable.fromIterable(it) }
+                    .map { messageViewModelMapper.map(it, selectedUser) }
+                    .toList()
+                    .toObservable()
+                    .map { ArrayList(it) }
                     .map<Change> { Change.ShowMessages(it) }
                     .startWith(Change.ShowLoader)
             }

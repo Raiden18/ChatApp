@@ -20,7 +20,7 @@ val DOMAIN_DEPENDENCIES = module(createdAtStart = true) {
     single<LogInUseCase> { LogInUseCaseImpl(get()) }
     single<GetAllChatsUseCase> { GetAllChatsUseCaseImpl() }
     single<SearchUserByEmailUseCase> { SearchUserByEmailUseCaseImpl(get()) }
-    single<GetMessagesHistory> { GetMessagesHistoryImpl() }
+    single<GetMessagesHistory> { GetMessagesHistoryImpl(get()) }
     single<SelectUserForChat> { SelectUserForChatImpl(get()) }
     single<GetSelectedUserForChat> { GetSelectedUserForChatImpl(get()) }
     single<SendMessage> { SendMessageImpl(get(), get()) }

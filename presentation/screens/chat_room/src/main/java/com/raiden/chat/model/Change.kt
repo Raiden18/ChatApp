@@ -1,9 +1,9 @@
 package com.raiden.chat.model
 
-import com.raiden.domain.models.Message
+import com.raiden.chat.model.message.MessageViewModel
 
 sealed class Change {
-    data class ShowMessages(val messages: List<Message>) : Change()
+    data class ShowMessages(val messages: List<MessageViewModel>) : Change()
     object ShowLoader : Change()
     object DoNothing : Change()
 }

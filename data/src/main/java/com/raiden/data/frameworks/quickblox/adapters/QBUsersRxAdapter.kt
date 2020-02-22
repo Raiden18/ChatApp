@@ -1,6 +1,5 @@
 package com.raiden.data.frameworks.quickblox.adapters
 
-import com.quickblox.auth.session.QBSession
 import com.quickblox.chat.model.QBChatDialog
 import com.quickblox.chat.model.QBChatMessage
 import com.quickblox.users.model.QBUser
@@ -20,4 +19,6 @@ interface QBUsersRxAdapter {
     fun getChatDialogById(dialogId: String): Single<QBChatDialog>
 
     fun getUserById(id: Int): Single<QBUser>
+
+    fun getAllMessages(dialogId: String): Single<ArrayList<QBChatMessage>>
 }
