@@ -1,5 +1,6 @@
 package com.raiden.data.frameworks.quickblox.adapters
 
+import com.quickblox.auth.session.QBSession
 import com.quickblox.chat.model.QBChatDialog
 import com.quickblox.chat.model.QBChatMessage
 import com.quickblox.users.model.QBUser
@@ -8,7 +9,7 @@ import io.reactivex.Single
 interface QBUsersRxAdapter {
     fun logIn(qbUser: QBUser): Single<QBUser>
 
-    fun createSession(qbUser: QBUser): Single<QBUser>
+    fun createSession(email: String, password: String): Single<QBSession>
 
     fun getUsers(page: Int, perPage: Int): Single<ArrayList<QBUser>>
 

@@ -26,7 +26,11 @@ class SessionRepositoryImpl(
 
     override fun logIn(email: String, password: String): Observable<User> {
         val qbUser = QBUser(email, password)
-        return qbUsersRxAdapter.createSession(qbUser)
+        return qbUsersRxAdapter.createSession(email, password)
+            .map {
+                qbUser.id = it.userId
+                qbUser
+            }
             .flatMapObservable { qbUsersRxAdapter.logIn(it).toObservable() }
             .flatMap { qbUsersRxAdapter.getUserById(it.id).toObservable() }
             .map { User(it.id, it.email, it.fullName) }

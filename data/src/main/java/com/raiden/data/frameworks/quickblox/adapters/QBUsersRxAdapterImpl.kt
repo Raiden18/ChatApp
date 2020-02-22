@@ -64,19 +64,11 @@ class QBUsersRxAdapterImpl : QBUsersRxAdapter {
         }
     }
 
-    override fun createSession(qbUser: QBUser): Single<QBUser> {
+    override fun createSession(email: String, password: String): Single<QBSession> {
         return Single.create { emitter ->
+            val qbUser = QBUser(email, password)
             val quickBoxRxAdapter = SimpleSingleEntityCallback(emitter)
-            QBAuth.createSession(qbUser).performAsync(object : QBEntityCallback<QBSession> {
-                override fun onSuccess(p0: QBSession, p1: Bundle?) {
-                    qbUser.id = p0.userId
-                    emitter.onSuccess(qbUser)
-                }
-
-                override fun onError(p0: QBResponseException) {
-                    emitter.onError(p0)
-                }
-            })
+            QBAuth.createSession(qbUser).performAsync(quickBoxRxAdapter)
         }
     }
 
