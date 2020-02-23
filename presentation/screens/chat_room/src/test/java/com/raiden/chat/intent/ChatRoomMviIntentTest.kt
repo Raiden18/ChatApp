@@ -3,6 +3,7 @@ package com.raiden.chat.intent
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
 import com.raiden.chat.model.Action
 import com.raiden.chat.model.State
+import com.raiden.chat.model.message.MessageViewModel
 import com.raiden.domain.models.Message
 import com.raiden.domain.models.User
 import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
@@ -21,6 +22,7 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
     private lateinit var getUserForChatUseCase: GetSelectedUserForChat
     private lateinit var sendMessage: SendMessage
     private lateinit var consumer: Consumer<State>
+    private lateinit var messageViewModelMapper: MessageViewModelMapper
 
     @Before
     fun setUp() {
@@ -28,8 +30,13 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         consumer = spyk()
         getUserForChatUseCase = spyk()
         sendMessage = spyk()
-        chatMviIntent =
-            ChatRoomMviIntent(getMessagesHistoryUseCase, getUserForChatUseCase, sendMessage)
+        messageViewModelMapper = spyk()
+        chatMviIntent = ChatRoomMviIntent(
+            getMessagesHistoryUseCase,
+            getUserForChatUseCase,
+            sendMessage,
+            messageViewModelMapper
+        )
         chatMviIntent.observableState.subscribe(consumer)
     }
 
@@ -38,13 +45,17 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         //Given
         val messages = listOf<Message>(mockk())
         val user: User = mockk(relaxed = true)
+        val messageViewModel: MessageViewModel = mockk()
+        val messagesViewModel = listOf<MessageViewModel>(messageViewModel)
         every {
             getMessagesHistoryUseCase()
         } returns Observable.just(messages)
         every {
             getUserForChatUseCase.invoke()
         } returns Observable.just(user)
-
+        every {
+            messageViewModelMapper.map(any(), any())
+        } returns messageViewModel
         //When
         chatMviIntent.dispatch(Action.LoadData)
         testSchedulerRule.triggerActions()
@@ -52,7 +63,7 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         //Then
         verifyOrder {
             consumer.accept(State.Loading)
-            consumer.accept(State.Messages(messages))
+            consumer.accept(State.Messages(messagesViewModel))
         }
     }
 

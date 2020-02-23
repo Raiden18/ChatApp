@@ -43,6 +43,7 @@ class ChatRoomFragment @Deprecated("") constructor() :
         when (state) {
             is State.Messages -> {
                 Log.i("HUI", state.messages.toString())
+                chat_room_messages.swapItems(state.messages)
             }
         }
     }

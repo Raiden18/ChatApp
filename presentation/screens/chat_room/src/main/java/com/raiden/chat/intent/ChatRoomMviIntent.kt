@@ -1,5 +1,6 @@
 package com.raiden.chat.intent
 
+import android.util.Log
 import com.raiden.chat.model.Action
 import com.raiden.chat.model.Change
 import com.raiden.chat.model.State
@@ -38,12 +39,11 @@ class ChatRoomMviIntent(
             .flatMap { getSelectedUserForChat() }
             .flatMap { selectedUser ->
                 getMessagesHistoryUseCase()
-                    .flatMap { Observable.fromIterable(it) }
                     .map { messageViewModelMapper.map(it, selectedUser) }
-                    .toList()
-                    .toObservable()
-                    .map { ArrayList(it) }
-                    .map<Change> { Change.ShowMessages(it) }
+                    .map<Change> {
+                        Log.i("HUI", it.size.toString())
+                        Change.ShowMessages(it)
+                    }
                     .startWith(Change.ShowLoader)
             }
 

@@ -9,7 +9,8 @@
         style="@style/Toolbar.BackNavigation" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.raiden.chat.view.widgets.messages.MessagesRecyclerView
+        android:id="@+id/chat_room_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
