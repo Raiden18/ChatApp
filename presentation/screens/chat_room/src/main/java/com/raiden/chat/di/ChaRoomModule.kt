@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val CHAT_ROOM_MODULE = module {
     scope(named<ChatRoomFragment>()) {
         viewModel {
-            ChatRoomMviIntent(get(), get(), get(), get())
+            ChatRoomMviIntent(get(), get(), get(), get(), get())
         }
 
         scoped<MessageViewModelMapper> { MessageViewModelMapperImpl() }

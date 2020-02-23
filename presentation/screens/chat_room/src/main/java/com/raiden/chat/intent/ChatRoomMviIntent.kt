@@ -1,6 +1,5 @@
 package com.raiden.chat.intent
 
-import android.util.Log
 import com.raiden.chat.model.Action
 import com.raiden.chat.model.Change
 import com.raiden.chat.model.State
@@ -8,6 +7,7 @@ import com.raiden.core.mvi.CoreMviIntent
 import com.raiden.core.mvi.Reducer
 import com.raiden.domain.usecases.chatroom.messages.get.GetMessagesHistory
 import com.raiden.domain.usecases.chatroom.messages.send.SendMessage
+import com.raiden.domain.usecases.chatroom.messages.subscribe.SubscribeOnIncomingMessages
 import com.raiden.domain.usecases.chatroom.user.get.GetSelectedUserForChat
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
@@ -18,7 +18,8 @@ class ChatRoomMviIntent(
     private val getMessagesHistoryUseCase: GetMessagesHistory,
     private val getSelectedUserForChat: GetSelectedUserForChat,
     private val sendMessage: SendMessage,
-    private val messageViewModelMapper: MessageViewModelMapper
+    private val messageViewModelMapper: MessageViewModelMapper,
+    private val subscribeOnIncomingMessages: SubscribeOnIncomingMessages
 ) : CoreMviIntent<Action, State>() {
     override val initialState: State = State.Idle
 
@@ -27,8 +28,17 @@ class ChatRoomMviIntent(
             is Change.ShowMessages -> State.Messages(change.messages)
             is Change.ShowLoader -> State.Loading
             is Change.DoNothing -> state
+            is Change.ShowIncomingMessage -> State.AddMessage(change.message)
         }
     }
+
+    private val incomingMessages = subscribeOnIncomingMessages()
+        .flatMap { message ->
+            getSelectedUserForChat()
+                .map { messageViewModelMapper.map(message, it) }
+                .map<Change> { Change.ShowIncomingMessage(it) }
+        }
+
 
     init {
         bindActions()
@@ -40,10 +50,7 @@ class ChatRoomMviIntent(
             .flatMap { selectedUser ->
                 getMessagesHistoryUseCase()
                     .map { messageViewModelMapper.map(it, selectedUser) }
-                    .map<Change> {
-                        Log.i("HUI", it.size.toString())
-                        Change.ShowMessages(it)
-                    }
+                    .map<Change> { Change.ShowMessages(it) }
                     .startWith(Change.ShowLoader)
             }
 
@@ -55,7 +62,8 @@ class ChatRoomMviIntent(
             }
 
 
-        disposables += Observable.merge(loadDataAction, sendMessage)
+
+        disposables += Observable.merge(loadDataAction, sendMessage, incomingMessages)
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::accept, Timber::e)

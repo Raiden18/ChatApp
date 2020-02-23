@@ -6,5 +6,6 @@ import com.raiden.core.mvi.CoreState
 sealed class State : CoreState {
     object Idle : State()
     data class Messages(val messages: List<MessageViewModel>) : State()
+    data class AddMessage(val message: MessageViewModel) : State()
     object Loading : State()
 }

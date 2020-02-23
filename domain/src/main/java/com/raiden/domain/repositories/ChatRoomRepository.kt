@@ -9,4 +9,5 @@ interface ChatRoomRepository {
     fun getSelectedUserForChat(): Observable<User>
     fun sendMessage(message: Message): Observable<Unit>
     fun getAllMessages(receiverId: Int): Observable<List<Message>>
+    fun subscribeOnIncomingMessages(): Observable<Message>
 }

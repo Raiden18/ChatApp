@@ -1,6 +1,5 @@
 package com.raiden.data.repositories
 
-import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapter
 import com.raiden.domain.models.User
@@ -15,7 +14,6 @@ class SessionRepositoryImpl(
 
     override fun getUser(): Observable<User> {
         return selectedUserForChat
-            .doOnNext { Log.i("1488-GET_", it.id.toString()) }
     }
 
     override fun saveUser(user: User): Observable<Unit> {

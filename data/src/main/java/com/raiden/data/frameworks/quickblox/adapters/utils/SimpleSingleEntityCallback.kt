@@ -8,12 +8,11 @@ import io.reactivex.SingleEmitter
 class SimpleSingleEntityCallback<T>(
     private val singleEmitter: SingleEmitter<T>
 ) : QBEntityCallback<T> {
+
     override fun onSuccess(p0: T?, p1: Bundle?) {
         p0?.let {
             singleEmitter.onSuccess(p0)
         }
-
-
     }
 
     override fun onError(p0: QBResponseException?) {

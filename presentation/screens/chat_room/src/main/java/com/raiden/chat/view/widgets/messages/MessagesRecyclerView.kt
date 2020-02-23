@@ -26,6 +26,13 @@ class MessagesRecyclerView(
         messageAdapter.items = items
     }
 
+    fun addMessage(messageViewModel: MessageViewModel) {
+        initAdapter()
+        val messages = ArrayList(messageAdapter.items)
+        messages.add(messageViewModel)
+        messageAdapter.items = messages
+    }
+
     private fun initAdapter() {
         if (adapter == null) {
             adapter = messageAdapter

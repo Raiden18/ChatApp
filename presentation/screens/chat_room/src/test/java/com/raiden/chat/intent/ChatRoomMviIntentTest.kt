@@ -45,8 +45,9 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         //Given
         val messages = listOf<Message>(mockk())
         val user: User = mockk(relaxed = true)
-        val messageViewModel: MessageViewModel = mockk()
-        val messagesViewModel = listOf<MessageViewModel>(messageViewModel)
+        val messagesViewModel = listOf<MessageViewModel>(mockk())
+
+        //When
         every {
             getMessagesHistoryUseCase()
         } returns Observable.just(messages)
@@ -55,13 +56,12 @@ class ChatRoomMviIntentTest : BaseMviIntentTest() {
         } returns Observable.just(user)
         every {
             messageViewModelMapper.map(any(), any())
-        } returns messageViewModel
-        //When
+        } returns messagesViewModel
         chatMviIntent.dispatch(Action.LoadData)
         testSchedulerRule.triggerActions()
 
         //Then
-        verifyOrder {
+        verify {
             consumer.accept(State.Loading)
             consumer.accept(State.Messages(messagesViewModel))
         }

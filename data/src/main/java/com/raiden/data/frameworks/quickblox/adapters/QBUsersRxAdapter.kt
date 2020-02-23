@@ -3,6 +3,7 @@ package com.raiden.data.frameworks.quickblox.adapters
 import com.quickblox.chat.model.QBChatDialog
 import com.quickblox.chat.model.QBChatMessage
 import com.quickblox.users.model.QBUser
+import io.reactivex.Observable
 import io.reactivex.Single
 
 interface QBUsersRxAdapter {
@@ -14,11 +15,13 @@ interface QBUsersRxAdapter {
 
     fun createDialog(receiverId: Int): Single<QBChatDialog>
 
-    fun sendMessage(message: QBChatMessage, chatDialog: QBChatDialog): Single<Void>
+    fun sendMessage(message: QBChatMessage, chatDialog: QBChatDialog): Single<Unit>
 
     fun getChatDialogById(dialogId: String): Single<QBChatDialog>
 
     fun getUserById(id: Int): Single<QBUser>
 
-    fun getAllMessages(dialogId: String): Single<ArrayList<QBChatMessage>>
+    fun getAllMessages(qbChatDialog: QBChatDialog): Single<ArrayList<QBChatMessage>>
+
+    fun subscribeOnIncomingMessages(qbChatDialog: QBChatDialog): Observable<QBChatMessage>
 }

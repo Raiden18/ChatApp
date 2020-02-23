@@ -6,4 +6,5 @@ import com.raiden.domain.models.User
 
 interface MessageViewModelMapper {
     fun map(messags: List<Message>, selectedUserForChat: User): List<MessageViewModel>
+    fun map(message: Message, selectedUserForChat: User): MessageViewModel
 }

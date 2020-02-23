@@ -1,7 +1,6 @@
 package com.raiden.chat.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.raiden.chat.R
 import com.raiden.chat.intent.ChatRoomMviIntent
@@ -41,10 +40,8 @@ class ChatRoomFragment @Deprecated("") constructor() :
 
     override fun renderState(state: State) {
         when (state) {
-            is State.Messages -> {
-                Log.i("HUI", state.messages.toString())
-                chat_room_messages.swapItems(state.messages)
-            }
+            is State.Messages -> chat_room_messages.swapItems(state.messages)
+            is State.AddMessage -> chat_room_messages.addMessage(state.message)
         }
     }
 
