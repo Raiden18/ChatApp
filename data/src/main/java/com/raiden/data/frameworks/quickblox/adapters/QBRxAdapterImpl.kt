@@ -1,13 +1,11 @@
 package com.raiden.data.frameworks.quickblox.adapters
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import com.quickblox.auth.QBAuth
 import com.quickblox.auth.session.QBSession
 import com.quickblox.chat.QBChatService
 import com.quickblox.chat.QBRestChatService
-import com.quickblox.chat.QBSystemMessagesManager
 import com.quickblox.chat.exception.QBChatException
 import com.quickblox.chat.listeners.QBChatDialogMessageListener
 import com.quickblox.chat.model.QBChatDialog
@@ -20,10 +18,11 @@ import com.quickblox.core.request.QBPagedRequestBuilder
 import com.quickblox.users.QBUsers
 import com.quickblox.users.model.QBUser
 import com.raiden.data.frameworks.quickblox.adapters.utils.SimpleSingleEntityCallback
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
-class QBUsersRxAdapterImpl : QBUsersRxAdapter {
+class QBRxAdapterImpl : QBRxAdapter {
 
     override fun logIn(qbUser: QBUser): Single<QBUser> {
         return Single.create { emitter ->
@@ -61,30 +60,17 @@ class QBUsersRxAdapterImpl : QBUsersRxAdapter {
     override fun sendMessage(
         message: QBChatMessage,
         chatDialog: QBChatDialog
-    ): Single<Unit> {
-        return Single.create { emitter ->
-            chatDialog.initForChat(QBChatService.getInstance())
-            message.setSaveToHistory(true)
-            chatDialog.deliverMessage(message)
+    ): Completable {
+        return Completable.create { emitter ->
             chatDialog.sendMessage(message, object : QBEntityCallback<Void> {
                 override fun onSuccess(p0: Void?, p1: Bundle?) {
-                    emitter.onSuccess(Unit)
+                    emitter.onComplete()
                 }
 
                 override fun onError(p0: QBResponseException?) {
                     emitter.onError(p0!!)
                 }
             })
-            QBRestChatService.createMessage(message, true)
-                .performAsync(object : QBEntityCallback<QBChatMessage> {
-                    override fun onSuccess(p0: QBChatMessage?, p1: Bundle?) {
-                        emitter.onSuccess(Unit)
-                    }
-
-                    override fun onError(p0: QBResponseException) {
-                        emitter.onError(p0)
-                    }
-                })
         }
     }
 
@@ -118,72 +104,38 @@ class QBUsersRxAdapterImpl : QBUsersRxAdapter {
         }
     }
 
-    override fun getAllMessages(qbChatDialog: QBChatDialog): Single<ArrayList<QBChatMessage>> {
+    override fun getAllMessages(
+        qBMessageGetBuilder: QBMessageGetBuilder,
+        qbChatDialog: QBChatDialog
+    ): Single<ArrayList<QBChatMessage>> {
         return Single.create { emitter ->
-            val messageGetBuilder = QBMessageGetBuilder()
-            messageGetBuilder.limit = 500
             val quickBoxRxAdapter = SimpleSingleEntityCallback(emitter)
-            QBRestChatService.getDialogMessages(qbChatDialog, messageGetBuilder)
+            QBRestChatService.getDialogMessages(qbChatDialog, qBMessageGetBuilder)
                 .performAsync(quickBoxRxAdapter)
         }
+
     }
 
     override fun subscribeOnIncomingMessages(qbChatDialog: QBChatDialog): Observable<QBChatMessage> {
         return Observable.create { emitter ->
-            QBChatService.getInstance().incomingMessagesManager.addDialogMessageListener(object :
-                QBChatDialogMessageListener {
-                override fun processMessage(p0: String?, p1: QBChatMessage?, p2: Int?) {
-                    Log.i("HUI", p1!!.body.toString())
+            Log.i("HUI", "SUBSCRIBE")
+            qbChatDialog.addMessageListener(object : QBChatDialogMessageListener {
+                override fun processMessage(p0: String?, p1: QBChatMessage, p2: Int?) {
+                    Log.i("HUI", p1.body)
+                    emitter.onNext(p1)
                 }
 
                 override fun processError(
                     p0: String?,
-                    p1: QBChatException?,
+                    p1: QBChatException,
                     p2: QBChatMessage?,
                     p3: Int?
                 ) {
-
+                    emitter.onError(p1)
                 }
             })
         }
     }
 }
 
-val PROPERTY_OCCUPANTS_IDS = "occupants_ids"
-val PROPERTY_DIALOG_TYPE = "dialog_type"
-val PROPERTY_DIALOG_NAME = "dialog_name"
-val PROPERTY_NOTIFICATION_TYPE = "notification_type"
-
-
-private fun buildSystemMessageAboutCreatingGroupDialog(dialog: QBChatDialog): QBChatMessage {
-    val qbChatMessage = QBChatMessage()
-    qbChatMessage.dialogId = dialog.dialogId
-    qbChatMessage.setProperty(
-        PROPERTY_OCCUPANTS_IDS,
-        getOccupantsIdsStringFromList(dialog.occupants)
-    )
-    qbChatMessage.setProperty(PROPERTY_DIALOG_TYPE, dialog.type.code.toString())
-    qbChatMessage.setProperty(PROPERTY_DIALOG_NAME, dialog.name.toString())
-    qbChatMessage.setProperty(PROPERTY_NOTIFICATION_TYPE, "1")
-
-    return qbChatMessage
-}
-
-fun getOccupantsIdsStringFromList(occupantIdsList: Collection<Int>): String {
-    return TextUtils.join(",", occupantIdsList)
-}
-
-fun sendSystemMessageAboutCreatingDialog(
-    systemMessagesManager: QBSystemMessagesManager,
-    dialog: QBChatDialog
-) {
-    val systemMessageCreatingDialog = buildSystemMessageAboutCreatingGroupDialog(dialog)
-
-    for (recipientId in dialog.occupants) {
-        if (recipientId != QBChatService.getInstance().user.id) {
-            systemMessageCreatingDialog.recipientId = recipientId
-            systemMessagesManager.sendSystemMessage(systemMessageCreatingDialog)
-        }
-    }
-}
 

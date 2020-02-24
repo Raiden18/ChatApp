@@ -40,36 +40,5 @@ class QuickbloxInitter(private val application: Application) {
         QBChatService.setConfigurationBuilder(builder)
         QBChatService.setDebugEnabled(true)
         QBChatService.setDefaultPacketReplyTimeout(PACKAGE_REPLY_TIMEOUT)
-
-        QBChatService.getInstance().addConnectionListener(object : ConnectionListener {
-            override fun connected(p0: XMPPConnection?) {
-                Log.i("HUI", "connected")
-            }
-
-            override fun connectionClosed() {
-                Log.i("HUI", "connectionClosed")
-            }
-
-            override fun connectionClosedOnError(p0: Exception?) {
-                Log.i("HUI", "connectionClosedOnError")
-            }
-
-            override fun reconnectionSuccessful() {
-                Log.i("HUI", "reconnectionSuccessful")
-            }
-
-            override fun authenticated(p0: XMPPConnection?, p1: Boolean) {
-                Log.i("HUI", "authenticated")
-            }
-
-            override fun reconnectionFailed(p0: Exception?) {
-                Log.i("HUI", "reconnectionFailed")
-            }
-
-            override fun reconnectingIn(p0: Int) {
-                Log.i("HUI", "reconnectingIn")
-            }
-        })
-
     }
 }

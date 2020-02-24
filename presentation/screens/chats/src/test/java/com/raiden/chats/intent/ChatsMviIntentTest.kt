@@ -3,7 +3,7 @@ package com.raiden.chats.intent
 import com.livetyping.beautyshop.core.testutils.BaseMviIntentTest
 import com.raiden.chats.models.Action
 import com.raiden.chats.models.State
-import com.raiden.domain.models.Chat
+import com.raiden.domain.models.Dialog
 import com.raiden.domain.usecases.chats.get.GetAllChatsUseCase
 import io.mockk.*
 import io.reactivex.Single
@@ -30,7 +30,7 @@ class ChatsMviIntentTest : BaseMviIntentTest() {
     @Test
     fun `Should return empty state if there are no chats`() {
         //Given
-        val chats = listOf<Chat>()
+        val chats = listOf<Dialog>()
         every {
             getAllChatsUseCase()
         } returns Single.just(chats)

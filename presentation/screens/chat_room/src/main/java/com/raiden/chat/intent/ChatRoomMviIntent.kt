@@ -58,6 +58,7 @@ class ChatRoomMviIntent(
             .map { it.text }
             .flatMap {
                 sendMessage(it)
+                    .toObservable<Change>()
                     .map<Change> { Change.DoNothing }
             }
 

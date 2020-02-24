@@ -1,14 +1,14 @@
 package com.raiden.data.repositories
 
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.raiden.data.frameworks.quickblox.adapters.QBUsersRxAdapter
+import com.raiden.data.frameworks.quickblox.adapters.QBRxAdapter
 import com.raiden.domain.models.User
 import com.raiden.domain.repositories.SessionRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 class SessionRepositoryImpl(
-    private val qbUsersRxAdapter: QBUsersRxAdapter
+    private val qbUsersRxAdapter: QBRxAdapter
 ) : SessionRepository {
     private val selectedUserForChat = BehaviorRelay.create<User>()
 
