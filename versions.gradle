@@ -1,5 +1,5 @@
 ext.versions = [
-        quickblox: '3.9.1',
+        quickblox: '3.9.2',
         koin     : '2.0.1',
         cicerone : '5.1.0'
 ]

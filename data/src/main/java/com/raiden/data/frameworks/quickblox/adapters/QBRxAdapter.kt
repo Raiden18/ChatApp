@@ -15,7 +15,7 @@ interface QBRxAdapter {
 
     fun getUsers(page: Int, perPage: Int): Single<ArrayList<QBUser>>
 
-    fun createDialog(receiverId: Int): Single<QBChatDialog>
+    fun createDialog(qbChatDialog: QBChatDialog): Single<QBChatDialog>
 
     fun sendMessage(message: QBChatMessage, chatDialog: QBChatDialog): Completable
 

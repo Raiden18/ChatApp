@@ -11,7 +11,6 @@ import com.quickblox.chat.listeners.QBChatDialogMessageListener
 import com.quickblox.chat.model.QBChatDialog
 import com.quickblox.chat.model.QBChatMessage
 import com.quickblox.chat.request.QBMessageGetBuilder
-import com.quickblox.chat.utils.DialogUtils
 import com.quickblox.core.QBEntityCallback
 import com.quickblox.core.exception.QBResponseException
 import com.quickblox.core.request.QBPagedRequestBuilder
@@ -28,7 +27,15 @@ class QBRxAdapterImpl : QBRxAdapter {
         return Single.create { emitter ->
             QBChatService.getInstance().login(qbUser, object : QBEntityCallback<Void> {
                 override fun onSuccess(p0: Void?, p1: Bundle?) {
-                    emitter.onSuccess(qbUser)
+                    QBUsers.signIn(qbUser).performAsync(object : QBEntityCallback<QBUser> {
+                        override fun onSuccess(p0: QBUser, p1: Bundle?) {
+                            emitter.onSuccess(p0)
+                        }
+
+                        override fun onError(p0: QBResponseException?) {
+                            emitter.onError(p0!!)
+                        }
+                    })
                 }
 
                 override fun onError(p0: QBResponseException?) {
@@ -49,11 +56,10 @@ class QBRxAdapterImpl : QBRxAdapter {
         }
     }
 
-    override fun createDialog(receiverId: Int): Single<QBChatDialog> {
+    override fun createDialog(qbChatDialog: QBChatDialog): Single<QBChatDialog> {
         return Single.create { emitter ->
-            val dialog = DialogUtils.buildPrivateDialog(receiverId)
             val quickBoxRxAdapter = SimpleSingleEntityCallback(emitter)
-            QBRestChatService.createChatDialog(dialog).performAsync(quickBoxRxAdapter)
+            QBRestChatService.createChatDialog(qbChatDialog).performAsync(quickBoxRxAdapter)
         }
     }
 
@@ -76,8 +82,8 @@ class QBRxAdapterImpl : QBRxAdapter {
 
     override fun createSession(email: String, password: String): Single<QBUser> {
         return Single.create { emitter ->
-            val qbUser = QBUser(email, password)
-            QBAuth.createSession(qbUser).performAsync(object : QBEntityCallback<QBSession> {
+            val qbUser = QBUser(email, password, email)
+            QBAuth.createSessionByEmail(qbUser).performAsync(object : QBEntityCallback<QBSession> {
                 override fun onSuccess(p0: QBSession, p1: Bundle?) {
                     qbUser.id = p0.userId
                     emitter.onSuccess(qbUser)
@@ -118,20 +124,19 @@ class QBRxAdapterImpl : QBRxAdapter {
 
     override fun subscribeOnIncomingMessages(qbChatDialog: QBChatDialog): Observable<QBChatMessage> {
         return Observable.create { emitter ->
-            Log.i("HUI", "SUBSCRIBE")
-            qbChatDialog.addMessageListener(object : QBChatDialogMessageListener {
-                override fun processMessage(p0: String?, p1: QBChatMessage, p2: Int?) {
-                    Log.i("HUI", p1.body)
-                    emitter.onNext(p1)
+            QBChatService.getInstance().incomingMessagesManager.addDialogMessageListener(object :
+                QBChatDialogMessageListener {
+                override fun processMessage(p0: String?, p1: QBChatMessage?, p2: Int?) {
+                    Log.i("HUI", "MESSAGE")
                 }
 
                 override fun processError(
                     p0: String?,
-                    p1: QBChatException,
+                    p1: QBChatException?,
                     p2: QBChatMessage?,
                     p3: Int?
                 ) {
-                    emitter.onError(p1)
+
                 }
             })
         }

@@ -24,7 +24,6 @@ class SessionRepositoryImpl(
     override fun logIn(email: String, password: String): Observable<User> {
         return qbUsersRxAdapter.createSession(email, password)
             .flatMap { qbUsersRxAdapter.logIn(it) }
-            .flatMap { qbUsersRxAdapter.getUserById(it.id) }
             .map { User(it.id, it.email, it.fullName) }
             .subscribeOn(AndroidSchedulers.mainThread())
             .toObservable()

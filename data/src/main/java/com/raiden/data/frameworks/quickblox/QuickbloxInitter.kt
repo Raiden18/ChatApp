@@ -1,11 +1,8 @@
 package com.raiden.data.frameworks.quickblox
 
 import android.app.Application
-import android.util.Log
 import com.quickblox.auth.session.QBSettings
 import com.quickblox.chat.QBChatService
-import org.jivesoftware.smack.ConnectionListener
-import org.jivesoftware.smack.XMPPConnection
 
 class QuickbloxInitter(private val application: Application) {
     companion object {
@@ -25,7 +22,7 @@ class QuickbloxInitter(private val application: Application) {
 
     private fun initSettings() {
         QBSettings.getInstance().apply {
-            init(application, APP_ID, AUTH_KEY, AUTH_SECRET)
+            init(application.applicationContext, APP_ID, AUTH_KEY, AUTH_SECRET)
             accountKey = ACCOUNT_KEY
         }
     }
@@ -36,6 +33,7 @@ class QuickbloxInitter(private val application: Application) {
             isKeepAlive = true
             isUseTls = true
             isAutojoinEnabled = true
+            isReconnectionAllowed = true
         }
         QBChatService.setConfigurationBuilder(builder)
         QBChatService.setDebugEnabled(true)
